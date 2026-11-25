@@ -9,180 +9,31 @@
   <meta property="og:description" content="Interactive Google Material 3 Expressive studio for prompt engineering, negative prompting, 5-scene JSON structuring, video scripting, and CapCut voiceover workflows." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+
+  <!-- Restore saved color theme before first paint -->
+  <script>
+    (function () {
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Google Fonts: Plus Jakarta Sans for Display/Headings, Inter for Body/Text, DM Sans for Accent/UI, JetBrains Mono for Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,500;1,9..40,600;1,9..40,700&family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,400;1,14..32,500;1,14..32,600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,600;0,700;0,800;1,600;1,700;1,800&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Production Tailwind CSS v4 (Vite Pipeline) -->
+  <link rel="stylesheet" href="/src/index.css" />
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        screens: {
-          'xs': '390px',
-          'sm': '640px',
-          'md': '768px',
-          'lg': '1024px',
-          'xl': '1280px',
-          '2xl': '1440px',
-        },
-        extend: {
-          fontFamily: {
-            heading: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Plus Jakarta Sans"', 'sans-serif'],
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            ui: ['"DM Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          borderRadius: {
-            'm3-sm': '16px',
-            'm3-md': '20px',
-            'm3-lg': '24px',
-            'm3-xl': '32px',
-          },
-          transitionTimingFunction: {
-            'spring': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-            'm3-standard': 'cubic-bezier(0.2, 0, 0, 1)',
-          }
-        }
-      }
-    };
-  </script>
-
-  <style>
-    :root {
-      --m3-bg: #F8FAFC;
-      --m3-surface-1: #FFFFFF;
-      --m3-surface-2: #F1F5F9;
-      --m3-surface-3: #E2E8F0;
-      --m3-primary: #4F46E5;
-      --m3-primary-container: #E0E7FF;
-      --m3-on-primary-container: #1E1B4B;
-      --m3-secondary: #0D9488;
-      --m3-tertiary: #D97706;
-      --m3-text-main: #0F172A;
-      --m3-text-muted: #475569;
-      --m3-border: rgba(51, 65, 85, 0.16);
-    }
-
-    html.dark {
-      --m3-bg: #0B0F19;
-      --m3-surface-1: #131B2E;
-      --m3-surface-2: #1C263E;
-      --m3-surface-3: #263352;
-      --m3-primary: #818CF8;
-      --m3-primary-container: #312E81;
-      --m3-on-primary-container: #E0E7FF;
-      --m3-secondary: #2DD4BF;
-      --m3-tertiary: #FBBF24;
-      --m3-text-main: #F8FAFC;
-      --m3-text-muted: #CBD5E1;
-      --m3-border: rgba(148, 163, 184, 0.18);
-    }
-
-    body {
-      background-color: var(--m3-bg);
-      color: var(--m3-text-main);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* Paragraphs, descriptions, and list body text */
-    p, li, label, description, .font-body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-    }
-
-    /* Display / Headings Hierarchy (Plus Jakarta Sans) */
-    h1, h2, .font-heading-hero {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    h3, h4, h5, h6, .font-heading {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
-    /* Interactive UI Elements (Buttons, Navigation, Badges, Tags, Pills, Controls) */
-    button,
-    .nav-tab,
-    .m3-pill,
-    input,
-    textarea,
-    select,
-    .ui-accent,
-    [role="tab"] {
-      font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.01em;
-    }
-
-    /* WCAG AA Visible Keyboard Focus States */
-    *:focus-visible {
-      outline: 3px solid #6366F1 !important;
-      outline-offset: 3px !important;
-      border-radius: 8px;
-    }
-
-    /* Tactile Spring Transitions for Material 3 Expressive */
-    .m3-spring {
-      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .m3-spring:active {
-      transform: scale(0.96);
-    }
-
-    .m3-card {
-      background-color: var(--m3-surface-1);
-      border: 1px solid var(--m3-border);
-      border-radius: 24px;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.25s ease;
-    }
-
-    .m3-card-elevated {
-      background-color: var(--m3-surface-2);
-      border: 1px solid var(--m3-border);
-      border-radius: 28px;
-    }
-
-    .m3-pill {
-      border-radius: 9999px;
-      transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .m3-pill:hover {
-      transform: translateY(-2px);
-    }
-    .m3-pill:active {
-      transform: scale(0.95);
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(100, 116, 139, 0.4);
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(100, 116, 139, 0.7);
-    }
-  </style>
 </head>
 
 <body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
@@ -230,6 +81,12 @@
         <button id="btn-export-all" type="button" class="m3-pill px-4 py-2 text-xs sm:text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 flex items-center gap-1.5" title="Download all your built prompts and scripts as a text file">
           <i data-lucide="download" class="w-4 h-4"></i>
           <span class="hidden md:inline">Export Workbook</span>
+        </button>
+
+        <!-- Reset Session Button -->
+        <button id="btn-reset-session" type="button" class="m3-pill px-3.5 py-2 text-xs sm:text-sm font-bold bg-slate-100 dark:bg-slate-800 hover:bg-rose-500/15 hover:text-rose-600 dark:hover:text-rose-400 text-slate-700 dark:text-slate-300 border border-slate-700/20 flex items-center gap-1.5" title="Reset saved freestyle inputs and task progress">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          <span class="hidden lg:inline">Reset Session</span>
         </button>
 
         <!-- Theme Toggle Button -->
@@ -873,9 +730,17 @@
 
               <div>
                 <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-2">
-                  3. Additional Optional Exclusions
+                  3. Additional & Custom Exclusions
                 </span>
-                <div id="t2-extra-pills" class="flex flex-wrap gap-1.5"></div>
+                <div id="t2-extra-pills" class="flex flex-wrap gap-1.5 mb-3"></div>
+                <div class="flex flex-col sm:flex-row gap-2">
+                  <label for="t2-custom-neg-input" class="sr-only">Add custom negative exclusions</label>
+                  <input id="t2-custom-neg-input" type="text" placeholder="Add custom exclusions (e.g. neon signs, plastic texture, modern cars)..." class="flex-1 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-700/25 text-xs sm:text-sm text-slate-900 dark:text-white" />
+                  <button type="button" id="btn-add-t2-custom-neg" class="m3-pill px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shrink-0">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    <span>Add Exclusion</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -942,10 +807,14 @@
               <span class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">Voiceover Tone</span>
               <div id="t3-tone-pills" class="flex flex-wrap gap-1.5"></div>
             </div>
-            <div>
-              <label for="t3-story-direction" class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">
-                Story Direction, Twist, or Outcome (Optional Freestyle)
-              </label>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <label for="t3-story-direction" class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300">
+                  Story Direction, Twist, or Outcome (Optional Freestyle)
+                </label>
+                <span class="text-[11px] text-slate-500">Pick a preset or type your own</span>
+              </div>
+              <div id="t3-outcome-pills" class="flex flex-wrap gap-1.5"></div>
               <textarea id="t3-story-direction" rows="2" placeholder="Optional: e.g. Turn this into a comeback story, add an unexpected twist in Scene 3, or end with a bittersweet choice..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-700/30 text-xs sm:text-sm text-slate-900 dark:text-white"></textarea>
             </div>
             <div class="p-3.5 rounded-2xl bg-teal-500/10 border border-teal-500/25 text-xs text-slate-700 dark:text-slate-300 space-y-1">
@@ -1098,7 +967,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 1</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+                <input type="checkbox" data-sub-check="t5-frame-1" class="sub-task-checkbox w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Hook (0–10s)</div>
               <p class="text-slate-600 dark:text-slate-400">Copy Scene 1 Image + Negative prompt from your Task 3 AI Tool output.</p>
@@ -1106,7 +975,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 2</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+                <input type="checkbox" data-sub-check="t5-frame-2" class="sub-task-checkbox w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Context (10–20s)</div>
               <p class="text-slate-600 dark:text-slate-400">Copy Scene 2 Image + Negative prompt from your Task 3 AI Tool output.</p>
@@ -1114,7 +983,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 3</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+                <input type="checkbox" data-sub-check="t5-frame-3" class="sub-task-checkbox w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Re-Hook (20–30s)</div>
               <p class="text-slate-600 dark:text-slate-400">Copy Scene 3 Image + Negative prompt from your Task 3 AI Tool output.</p>
@@ -1122,7 +991,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 4</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+                <input type="checkbox" data-sub-check="t5-frame-4" class="sub-task-checkbox w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Value (30–40s)</div>
               <p class="text-slate-600 dark:text-slate-400">Copy Scene 4 Image + Negative prompt from your Task 3 AI Tool output.</p>
@@ -1130,7 +999,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 5</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+                <input type="checkbox" data-sub-check="t5-frame-5" class="sub-task-checkbox w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Reward (40–50s)</div>
               <p class="text-slate-600 dark:text-slate-400">Copy Scene 5 Image + Negative prompt from your Task 3 AI Tool output.</p>
@@ -1197,7 +1066,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 1</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                <input type="checkbox" data-sub-check="t6-clip-1" class="sub-task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Frame 1 + JSON #1</div>
               <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 1 & paste JSON Block 1 from your Task 4 reply.</p>
@@ -1205,7 +1074,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 2</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                <input type="checkbox" data-sub-check="t6-clip-2" class="sub-task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Frame 2 + JSON #2</div>
               <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 2 & paste JSON Block 2 from your Task 4 reply.</p>
@@ -1213,7 +1082,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 3</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                <input type="checkbox" data-sub-check="t6-clip-3" class="sub-task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Frame 3 + JSON #3</div>
               <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 3 & paste JSON Block 3 from your Task 4 reply.</p>
@@ -1221,7 +1090,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 4</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                <input type="checkbox" data-sub-check="t6-clip-4" class="sub-task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Frame 4 + JSON #4</div>
               <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 4 & paste JSON Block 4 from your Task 4 reply.</p>
@@ -1229,7 +1098,7 @@
             <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 5</span>
-                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                <input type="checkbox" data-sub-check="t6-clip-5" class="sub-task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
               </div>
               <div class="font-bold text-slate-900 dark:text-white">Frame 5 + JSON #5</div>
               <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 5 & paste JSON Block 5 from your Task 4 reply.</p>
@@ -1476,6 +1345,36 @@
     </div>
   </div>
 
+  <!-- Reset Session Confirmation Modal -->
+  <div id="reset-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
+    <div class="relative w-full max-w-md bg-slate-900 border border-slate-700/50 rounded-3xl p-6 space-y-5 text-slate-100 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          </div>
+          <h3 id="reset-modal-title" class="text-lg font-bold text-white">
+            Reset Session?
+          </h3>
+        </div>
+        <button type="button" id="btn-close-reset-modal" class="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white" aria-label="Close reset dialog">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+        This clears your auto-saved freestyle inputs, custom negative exclusions, story direction, and task/frame/clip checkboxes back to starter defaults. Your color theme stays unchanged.
+      </p>
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-800">
+        <button type="button" id="btn-cancel-reset-modal" class="m3-pill px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm">
+          Cancel
+        </button>
+        <button type="button" id="btn-confirm-reset-session" class="m3-pill px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm">
+          Reset Everything
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Pill -->
   <div id="toast-notification" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
     <div class="px-5 py-3 rounded-full bg-slate-900 dark:bg-indigo-600 text-white text-xs sm:text-sm font-bold shadow-2xl flex items-center gap-2 border border-white/15">
@@ -1486,6 +1385,34 @@
 
   <script>
     // --- CORE CONSTANTS & LIVE SYNC MAPS ---
+    const STORAGE_KEY = 'pes_studio_session_v1';
+
+    const STORY_OUTCOME_PRESETS = [
+      {
+        label: 'Quiet Triumph',
+        text: 'Build toward a quiet, earned triumph where patience and preparation pay off in Scene 5.'
+      },
+      {
+        label: 'Plot Twist',
+        text: 'Introduce an unexpected twist in Scene 3 that reframes everything assumed in Scene 1, ending with a surprising reveal in Scene 5.'
+      },
+      {
+        label: 'Bittersweet Lesson',
+        text: 'End with a bittersweet emotional realization where the character lets go of something to gain deeper wisdom.'
+      },
+      {
+        label: 'Comedic Reversal',
+        text: 'Build dramatic tension through Scene 3, then subvert expectations with a witty, lighthearted comedic reversal in Scenes 4 and 5.'
+      },
+      {
+        label: 'Cliffhanger',
+        text: 'Escalate the mystery through Scene 4 and close Scene 5 on a striking open-ended cliffhanger that sparks viewer curiosity.'
+      },
+      {
+        label: 'Comeback Arc',
+        text: 'Show a clear setback in Scene 3 followed by a resilient comeback and victorious closing shot in Scene 5.'
+      }
+    ];
     const MANDATORY_NEGATIVES = [
       'distorted anatomy', 'extra limbs', 'deformed hands', 'duplicate person',
       'blurry', 'fisheye', 'oversaturated colours', 'watermark', 'garbled text',
@@ -1782,8 +1709,167 @@
       }, 2600);
     }
 
+    let isHydrating = true;
+    let currentActiveTab = 'lesson';
+
+    // --- LOCALSTORAGE AUTO-SAVE & RESTORE ---
+    function saveSessionState() {
+      if (isHydrating) return;
+      try {
+        const taskChecks = {};
+        document.querySelectorAll('.task-checkbox').forEach(chk => {
+          const key = chk.getAttribute('data-task-check');
+          if (key) taskChecks[key] = chk.checked;
+        });
+
+        const subChecks = {};
+        document.querySelectorAll('.sub-task-checkbox').forEach(chk => {
+          const key = chk.getAttribute('data-sub-check');
+          if (key) subChecks[key] = chk.checked;
+        });
+
+        const payload = {
+          activeTab: currentActiveTab,
+          anatomy: {
+            persona: document.getElementById('anat-persona').value,
+            task: document.getElementById('anat-task').value,
+            limits: document.getElementById('anat-limits').value,
+            format: document.getElementById('anat-format').value
+          },
+          task1: { ...state.task1 },
+          task2: {
+            mandatoryDisabled: [...state.task2.mandatoryDisabled],
+            autoMirrorDisabled: [...state.task2.autoMirrorDisabled],
+            manualExtras: [...state.task2.manualExtras]
+          },
+          task3: {
+            hookStyle: state.task3.hookStyle,
+            tone: state.task3.tone,
+            storyDirection: state.task3.storyDirection,
+            isCustomPrompt: state.task3.isCustomPrompt
+          },
+          task7: { ...state.task7 },
+          taskChecks,
+          subChecks
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      } catch (e) {}
+    }
+
+    function loadSessionState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (!saved || typeof saved !== 'object') return;
+
+        if (saved.anatomy) {
+          if (typeof saved.anatomy.persona === 'string') document.getElementById('anat-persona').value = saved.anatomy.persona;
+          if (typeof saved.anatomy.task === 'string') document.getElementById('anat-task').value = saved.anatomy.task;
+          if (typeof saved.anatomy.limits === 'string') document.getElementById('anat-limits').value = saved.anatomy.limits;
+          if (typeof saved.anatomy.format === 'string') document.getElementById('anat-format').value = saved.anatomy.format;
+        }
+
+        if (saved.task1) {
+          ['subject', 'setting', 'style', 'palette', 'lighting', 'lens', 'accent'].forEach(k => {
+            if (typeof saved.task1[k] === 'string') state.task1[k] = saved.task1[k];
+          });
+          document.getElementById('t1-subject').value = state.task1.subject;
+          document.getElementById('t1-setting').value = state.task1.setting;
+        }
+
+        if (saved.task2) {
+          if (Array.isArray(saved.task2.mandatoryDisabled)) state.task2.mandatoryDisabled = saved.task2.mandatoryDisabled;
+          if (Array.isArray(saved.task2.autoMirrorDisabled)) state.task2.autoMirrorDisabled = saved.task2.autoMirrorDisabled;
+          if (Array.isArray(saved.task2.manualExtras)) state.task2.manualExtras = saved.task2.manualExtras;
+        }
+
+        if (saved.task3) {
+          if (typeof saved.task3.hookStyle === 'string') state.task3.hookStyle = saved.task3.hookStyle;
+          if (typeof saved.task3.tone === 'string') state.task3.tone = saved.task3.tone;
+          if (typeof saved.task3.storyDirection === 'string') state.task3.storyDirection = saved.task3.storyDirection;
+          if (typeof saved.task3.isCustomPrompt === 'boolean') state.task3.isCustomPrompt = saved.task3.isCustomPrompt;
+          document.getElementById('t3-story-direction').value = state.task3.storyDirection;
+        }
+
+        if (saved.task7) {
+          if (typeof saved.task7.activeVoice === 'string') state.task7.activeVoice = saved.task7.activeVoice;
+          if (typeof saved.task7.activeSpeed === 'string') state.task7.activeSpeed = saved.task7.activeSpeed;
+        }
+
+        if (saved.taskChecks && typeof saved.taskChecks === 'object') {
+          document.querySelectorAll('.task-checkbox').forEach(chk => {
+            const key = chk.getAttribute('data-task-check');
+            if (key && typeof saved.taskChecks[key] === 'boolean') {
+              chk.checked = saved.taskChecks[key];
+            }
+          });
+        }
+
+        if (saved.subChecks && typeof saved.subChecks === 'object') {
+          document.querySelectorAll('.sub-task-checkbox').forEach(chk => {
+            const key = chk.getAttribute('data-sub-check');
+            if (key && typeof saved.subChecks[key] === 'boolean') {
+              chk.checked = saved.subChecks[key];
+            }
+          });
+        }
+
+        if (typeof saved.activeTab === 'string') {
+          currentActiveTab = saved.activeTab;
+        }
+      } catch (e) {}
+    }
+
+    function resetSessionState() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+
+      isHydrating = true;
+      ['anat-persona', 'anat-task', 'anat-limits', 'anat-format'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+
+      state.task1 = { ...STARTER_TASK1_PRESET };
+      document.getElementById('t1-subject').value = state.task1.subject;
+      document.getElementById('t1-setting').value = state.task1.setting;
+
+      state.task2.mandatoryDisabled = [];
+      state.task2.autoMirrorDisabled = [];
+      state.task2.manualExtras = [];
+      document.getElementById('t2-custom-neg-input').value = '';
+
+      state.task3.hookStyle = 'Contradiction — name the paradox';
+      state.task3.tone = 'Calm, reflective, cinematic, and authoritative';
+      state.task3.storyDirection = '';
+      state.task3.isCustomPrompt = false;
+      document.getElementById('t3-story-direction').value = '';
+
+      state.task7.activeVoice = 'Calm, clear voice';
+      state.task7.activeSpeed = '0.7x';
+
+      document.querySelectorAll('.task-checkbox, .sub-task-checkbox').forEach(chk => {
+        chk.checked = false;
+      });
+
+      renderTask1Pills();
+      updateTask1And2Outputs();
+      renderTask3Options();
+      renderTask4MasterPrompt();
+      renderTask7Interactive();
+      updateAnatomyBuilder();
+      updateProgressCount();
+      isHydrating = false;
+
+      switchTab('lesson', false);
+      showToast('Session reset to defaults!');
+    }
+
     // --- TAB SWITCHER ---
-    function switchTab(tabId) {
+    function switchTab(tabId, shouldScroll = true) {
+      currentActiveTab = tabId;
       document.querySelectorAll('.tab-panel').forEach(panel => {
         panel.classList.add('hidden');
       });
@@ -1799,7 +1885,10 @@
           btn.className = 'nav-tab m3-pill px-4 py-2 text-xs sm:text-sm font-bold flex items-center gap-2 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-700/20';
         }
       });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      saveSessionState();
+      if (shouldScroll) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
     window.switchTab = switchTab;
 
@@ -1822,6 +1911,7 @@
       ].filter(Boolean).join('\n\n');
 
       document.getElementById('anat-output').textContent = compiled || 'Fill in the 4 pillars on the left to assemble your structured brief.';
+      saveSessionState();
     }
 
     // --- TASK 1 & TASK 2 LINKED RENDERING ---
@@ -2036,6 +2126,7 @@
       // Live-sync Task 3 and Task 4 master prompts with Task 1 & 2 selections
       renderTask3MasterPrompt();
       renderTask4MasterPrompt();
+      saveSessionState();
     }
 
     // --- TASK 3: GENERIC FREESTYLE 50-SECOND VIDEO SCRIPT MASTER PROMPT ---
@@ -2095,6 +2186,32 @@ Negative prompt: ${dynamicSceneNegatives}
       if (el) el.textContent = getTask3MasterScriptPrompt();
     }
 
+    function renderTask3OutcomePills() {
+      const outcomeContainer = document.getElementById('t3-outcome-pills');
+      if (!outcomeContainer) return;
+      outcomeContainer.innerHTML = '';
+      const currentDir = (state.task3.storyDirection || '').trim();
+      STORY_OUTCOME_PRESETS.forEach(preset => {
+        const active = currentDir === preset.text;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = active
+          ? 'm3-pill px-3 py-1 text-xs font-bold bg-amber-600 text-white shadow-sm'
+          : 'm3-pill px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-500/15 border border-slate-700/20';
+        btn.textContent = preset.label;
+        btn.addEventListener('click', () => {
+          const nextValue = active ? '' : preset.text;
+          state.task3.storyDirection = nextValue;
+          document.getElementById('t3-story-direction').value = nextValue;
+          renderTask3OutcomePills();
+          renderTask3MasterPrompt();
+          saveSessionState();
+          showToast(active ? 'Story direction cleared to open freestyle.' : `Applied "${preset.label}" story direction!`);
+        });
+        outcomeContainer.appendChild(btn);
+      });
+    }
+
     function renderTask3Options() {
       const hookContainer = document.getElementById('t3-hook-pills');
       hookContainer.innerHTML = '';
@@ -2131,7 +2248,9 @@ Negative prompt: ${dynamicSceneNegatives}
         toneContainer.appendChild(btn);
       });
 
+      renderTask3OutcomePills();
       renderTask3MasterPrompt();
+      saveSessionState();
     }
 
     // --- TASK 4: GENERIC MASTER JSON CONVERSION PROMPT ---
@@ -2185,6 +2304,7 @@ Return only the numbered JSON blocks, with no commentary.`;
         div.addEventListener('click', () => {
           state.task7.activeVoice = v.name;
           renderTask7Interactive();
+          saveSessionState();
           showToast(`Selected voice style: ${v.name}`);
         });
         voiceContainer.appendChild(div);
@@ -2217,6 +2337,7 @@ Return only the numbered JSON blocks, with no commentary.`;
         div.addEventListener('click', () => {
           state.task7.activeSpeed = s.rate;
           renderTask7Interactive();
+          saveSessionState();
           showToast(`Selected voice speed: ${s.rate}`);
         });
         speedContainer.appendChild(div);
@@ -2241,7 +2362,11 @@ Return only the numbered JSON blocks, with no commentary.`;
 
     // --- INITIALIZATION ---
     window.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
+
+      // Hydrate saved freestyle session from localStorage
+      isHydrating = true;
+      loadSessionState();
 
       // Navigation Tabs
       document.querySelectorAll('.nav-tab').forEach(btn => {
@@ -2331,6 +2456,47 @@ Return only the numbered JSON blocks, with no commentary.`;
         });
       });
 
+      // Custom Negative Prompt input in Task 2
+      function addCustomTask2Exclusions() {
+        const inputEl = document.getElementById('t2-custom-neg-input');
+        const raw = inputEl.value.trim();
+        if (!raw) return;
+
+        const terms = raw.split(',').map(s => s.trim()).filter(Boolean);
+        const { allAutoOpposites } = computeTask1Opposites(state.task1);
+        let addedCount = 0;
+
+        terms.forEach(term => {
+          const lower = term.toLowerCase();
+          const alreadyMandatory = MANDATORY_NEGATIVES.some(m => m.toLowerCase() === lower);
+          const alreadyAuto = allAutoOpposites.some(a => a.toLowerCase() === lower);
+          const alreadyManual = state.task2.manualExtras.some(x => x.toLowerCase() === lower);
+
+          if (alreadyMandatory) {
+            state.task2.mandatoryDisabled = state.task2.mandatoryDisabled.filter(m => m.toLowerCase() !== lower);
+            addedCount++;
+          } else if (alreadyAuto) {
+            state.task2.autoMirrorDisabled = state.task2.autoMirrorDisabled.filter(a => a.toLowerCase() !== lower);
+            addedCount++;
+          } else if (!alreadyManual) {
+            state.task2.manualExtras.push(term);
+            addedCount++;
+          }
+        });
+
+        inputEl.value = '';
+        updateTask1And2Outputs();
+        showToast(addedCount > 0 ? `Added ${addedCount} custom exclusion${addedCount > 1 ? 's' : ''}!` : 'Exclusion already active.');
+      }
+
+      document.getElementById('btn-add-t2-custom-neg').addEventListener('click', addCustomTask2Exclusions);
+      document.getElementById('t2-custom-neg-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addCustomTask2Exclusions();
+        }
+      });
+
       document.getElementById('btn-reset-t2-class').addEventListener('click', () => {
         state.task2.mandatoryDisabled = [];
         state.task2.autoMirrorDisabled = [];
@@ -2348,7 +2514,9 @@ Return only the numbered JSON blocks, with no commentary.`;
 
       document.getElementById('t3-story-direction').addEventListener('input', (e) => {
         state.task3.storyDirection = e.target.value;
+        renderTask3OutcomePills();
         renderTask3MasterPrompt();
+        saveSessionState();
       });
 
       document.getElementById('btn-reset-t3-class-prompt').addEventListener('click', () => {
@@ -2379,9 +2547,30 @@ Return only the numbered JSON blocks, with no commentary.`;
       modal.addEventListener('click', (e) => {
         if (e.target === modal) modal.classList.add('hidden');
       });
+
+      // Reset Session Confirmation Modal controls
+      const resetModal = document.getElementById('reset-modal');
+      document.getElementById('btn-reset-session').addEventListener('click', () => {
+        resetModal.classList.remove('hidden');
+      });
+      document.getElementById('btn-close-reset-modal').addEventListener('click', () => {
+        resetModal.classList.add('hidden');
+      });
+      document.getElementById('btn-cancel-reset-modal').addEventListener('click', () => {
+        resetModal.classList.add('hidden');
+      });
+      document.getElementById('btn-confirm-reset-session').addEventListener('click', () => {
+        resetModal.classList.add('hidden');
+        resetSessionState();
+      });
+      resetModal.addEventListener('click', (e) => {
+        if (e.target === resetModal) resetModal.classList.add('hidden');
+      });
+
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-          modal.classList.add('hidden');
+        if (e.key === 'Escape') {
+          if (!modal.classList.contains('hidden')) modal.classList.add('hidden');
+          if (!resetModal.classList.contains('hidden')) resetModal.classList.add('hidden');
         }
       });
 
@@ -2395,9 +2584,15 @@ Return only the numbered JSON blocks, with no commentary.`;
       // Task 7 setup
       renderTask7Interactive();
 
-      // Checkboxes & Progress tracking
+      // Checkboxes & Progress tracking (persisted to localStorage)
       document.querySelectorAll('.task-checkbox').forEach(chk => {
-        chk.addEventListener('change', updateProgressCount);
+        chk.addEventListener('change', () => {
+          updateProgressCount();
+          saveSessionState();
+        });
+      });
+      document.querySelectorAll('.sub-task-checkbox').forEach(chk => {
+        chk.addEventListener('change', saveSessionState);
       });
       updateProgressCount();
 
@@ -2451,6 +2646,10 @@ Return only the numbered JSON blocks, with no commentary.`;
       });
 
       updateAnatomyBuilder();
+      if (currentActiveTab && currentActiveTab !== 'lesson') {
+        switchTab(currentActiveTab, false);
+      }
+      isHydrating = false;
     });
   </script>
 </body>
