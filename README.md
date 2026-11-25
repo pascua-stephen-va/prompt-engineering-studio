@@ -1,11 +1,29 @@
-<div align="center">
+# Prompt Engineering Studio
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+An interactive **Prompt Engineering Studio** web application covering **1 Core Lesson & 7 Live Tasks**—from positive and negative prompting (with live automatic opposite mirroring) to 50-second vertical 9:16 video scripting, standalone motion JSON conversion, single-thread image/video generation workflows, and ElevenLabs voiceover + final cut assembly.
 
-  <h1>Built with AI Studio</h2>
+## Local Development
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+```bash
+npm install --legacy-peer-deps
+npm run dev
+```
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+The development server runs at `http://localhost:3000`.
 
-</div>
+## Production Build
+
+```bash
+npm run build
+```
+
+Builds the static site into `./dist`.
+
+## GitHub Pages Deployment
+
+This repository includes `.github/workflows/deploy.yml`, which automatically runs `npm install --legacy-peer-deps`, builds the project into `./dist`, and deploys it to GitHub Pages on every push to `main` (or via manual **Run workflow**).
+
+To enable deployment on GitHub:
+1. Push this repository to GitHub (default branch `main`).
+2. Go to **Settings → Pages**.
+3. Under **Build and deployment → Source**, select **GitHub Actions**.

@@ -1,0 +1,6 @@
+{
+  "name": "Prompt Engineering Studio",
+  "description": "Interactive Google Material 3 Expressive studio for prompt engineering, negative prompting, 5-scene JSON structuring, video scripting, and CapCut voiceover workflows.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

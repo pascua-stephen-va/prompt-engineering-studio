@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Engineering Studio — Interactive Curriculum & Builder</title>
+  <meta name="description" content="Interactive Google Material 3 Expressive studio for prompt engineering, negative prompting, 5-scene JSON structuring, video scripting, and CapCut voiceover workflows." />
+  <meta property="og:title" content="Prompt Engineering Studio — Interactive Curriculum & Builder" />
+  <meta property="og:description" content="Interactive Google Material 3 Expressive studio for prompt engineering, negative prompting, 5-scene JSON structuring, video scripting, and CapCut voiceover workflows." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Fonts: Plus Jakarta Sans for Display/Headings, Inter for Body/Text, DM Sans for Accent/UI, JetBrains Mono for Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,500;1,9..40,600;1,9..40,700&family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,400;1,14..32,500;1,14..32,600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,600;0,700;0,800;1,600;1,700;1,800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        screens: {
+          'xs': '390px',
+          'sm': '640px',
+          'md': '768px',
+          'lg': '1024px',
+          'xl': '1280px',
+          '2xl': '1440px',
+        },
+        extend: {
+          fontFamily: {
+            heading: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            ui: ['"DM Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          borderRadius: {
+            'm3-sm': '16px',
+            'm3-md': '20px',
+            'm3-lg': '24px',
+            'm3-xl': '32px',
+          },
+          transitionTimingFunction: {
+            'spring': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            'm3-standard': 'cubic-bezier(0.2, 0, 0, 1)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --m3-bg: #F8FAFC;
+      --m3-surface-1: #FFFFFF;
+      --m3-surface-2: #F1F5F9;
+      --m3-surface-3: #E2E8F0;
+      --m3-primary: #4F46E5;
+      --m3-primary-container: #E0E7FF;
+      --m3-on-primary-container: #1E1B4B;
+      --m3-secondary: #0D9488;
+      --m3-tertiary: #D97706;
+      --m3-text-main: #0F172A;
+      --m3-text-muted: #475569;
+      --m3-border: rgba(51, 65, 85, 0.16);
+    }
+
+    html.dark {
+      --m3-bg: #0B0F19;
+      --m3-surface-1: #131B2E;
+      --m3-surface-2: #1C263E;
+      --m3-surface-3: #263352;
+      --m3-primary: #818CF8;
+      --m3-primary-container: #312E81;
+      --m3-on-primary-container: #E0E7FF;
+      --m3-secondary: #2DD4BF;
+      --m3-tertiary: #FBBF24;
+      --m3-text-main: #F8FAFC;
+      --m3-text-muted: #CBD5E1;
+      --m3-border: rgba(148, 163, 184, 0.18);
+    }
+
+    body {
+      background-color: var(--m3-bg);
+      color: var(--m3-text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Paragraphs, descriptions, and list body text */
+    p, li, label, description, .font-body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Display / Headings Hierarchy (Plus Jakarta Sans) */
+    h1, h2, .font-heading-hero {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    h3, h4, h5, h6, .font-heading {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    /* Interactive UI Elements (Buttons, Navigation, Badges, Tags, Pills, Controls) */
+    button,
+    .nav-tab,
+    .m3-pill,
+    input,
+    textarea,
+    select,
+    .ui-accent,
+    [role="tab"] {
+      font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    /* WCAG AA Visible Keyboard Focus States */
+    *:focus-visible {
+      outline: 3px solid #6366F1 !important;
+      outline-offset: 3px !important;
+      border-radius: 8px;
+    }
+
+    /* Tactile Spring Transitions for Material 3 Expressive */
+    .m3-spring {
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .m3-spring:active {
+      transform: scale(0.96);
+    }
+
+    .m3-card {
+      background-color: var(--m3-surface-1);
+      border: 1px solid var(--m3-border);
+      border-radius: 24px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.25s ease;
+    }
+
+    .m3-card-elevated {
+      background-color: var(--m3-surface-2);
+      border: 1px solid var(--m3-border);
+      border-radius: 28px;
+    }
+
+    .m3-pill {
+      border-radius: 9999px;
+      transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .m3-pill:hover {
+      transform: translateY(-2px);
+    }
+    .m3-pill:active {
+      transform: scale(0.95);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.7);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+  <!-- Skip to Content Navigation for WCAG AA Accessibility -->
+  <a href="#main-workspace" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-indigo-600 focus:text-white focus:font-bold focus:rounded-full focus:shadow-2xl">
+    Skip to main content
+  </a>
+
+  <!-- Top Ambient Glow -->
+  <div class="pointer-events-none fixed inset-x-0 top-0 h-96 bg-gradient-to-b from-indigo-500/10 via-teal-500/5 to-transparent -z-10" aria-hidden="true"></div>
+
+  <!-- Sticky Expressive Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/85 dark:bg-[#0B0F19]/85 border-b border-slate-700/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 m3-spring">
+          <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/25">
+              Interactive Studio
+            </span>
+            <span class="hidden sm:inline-flex px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-teal-500/15 text-teal-800 dark:text-teal-300 border border-teal-500/25">
+              1 Core Lesson · 7 Live Tasks
+            </span>
+          </div>
+          <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-0.5">
+            Prompt Engineering
+          </h1>
+        </div>
+      </div>
+
+      <!-- Progress Pill & Controls -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <!-- Task Completion Counter -->
+        <div class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-100 dark:bg-slate-800/90 border border-slate-700/20 text-xs sm:text-sm font-semibold">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-teal-600 dark:text-teal-400"></i>
+          <span class="text-slate-700 dark:text-slate-200">Progress:</span>
+          <span id="header-progress-count" class="font-extrabold text-indigo-600 dark:text-indigo-400">0/7</span>
+        </div>
+
+        <!-- Export All Prompts Button -->
+        <button id="btn-export-all" type="button" class="m3-pill px-4 py-2 text-xs sm:text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 flex items-center gap-1.5" title="Download all your built prompts and scripts as a text file">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span class="hidden md:inline">Export Workbook</span>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button id="btn-theme-toggle" type="button" aria-label="Toggle color theme" class="m3-pill p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-700/20">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-indigo-600"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Primary Navigation Tabs (Material 3 Pill Bar) -->
+    <nav aria-label="Curriculum sections" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3 overflow-x-auto no-scrollbar">
+      <div class="flex items-center gap-2 min-w-max" role="tablist">
+        <button type="button" role="tab" id="tab-nav-lesson" aria-selected="true" aria-controls="tab-lesson" data-tab="lesson" class="nav-tab m3-pill px-4 py-2 text-xs sm:text-sm font-bold flex items-center gap-2 bg-indigo-600 text-white shadow-sm">
+          <i data-lucide="compass" class="w-4 h-4"></i>
+          <span>Core Lesson & Pipeline</span>
+        </button>
+        <button type="button" role="tab" id="tab-nav-tasks-1-3" aria-selected="false" aria-controls="tab-tasks-1-3" data-tab="tasks-1-3" class="nav-tab m3-pill px-4 py-2 text-xs sm:text-sm font-bold flex items-center gap-2 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-700/20">
+          <i data-lucide="sliders" class="w-4 h-4"></i>
+          <span>Tasks 1–3: Prompt & Script Lab</span>
+        </button>
+        <button type="button" role="tab" id="tab-nav-tasks-4-7" aria-selected="false" aria-controls="tab-tasks-4-7" data-tab="tasks-4-7" class="nav-tab m3-pill px-4 py-2 text-xs sm:text-sm font-bold flex items-center gap-2 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-700/20">
+          <i data-lucide="film" class="w-4 h-4"></i>
+          <span>Tasks 4–7: Video Production</span>
+        </button>
+        <button type="button" role="tab" id="tab-nav-deliverables" aria-selected="false" aria-controls="tab-deliverables" data-tab="deliverables" class="nav-tab m3-pill px-4 py-2 text-xs sm:text-sm font-bold flex items-center gap-2 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-700/20">
+          <i data-lucide="folder-check" class="w-4 h-4"></i>
+          <span>Saving Your Outputs</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Workspace -->
+  <main id="main-workspace" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <!-- ==========================================
+         TAB 1: CORE LESSON & PIPELINE
+    =========================================== -->
+    <div id="tab-lesson" role="tabpanel" aria-labelledby="tab-nav-lesson" class="tab-panel space-y-10">
+      <!-- Hero Banner -->
+      <div class="m3-card-elevated p-6 sm:p-10 relative overflow-hidden bg-gradient-to-br from-indigo-600/15 via-slate-900/5 to-teal-500/15 dark:from-indigo-950/70 dark:via-slate-900/90 dark:to-teal-950/50">
+        <div class="max-w-3xl space-y-4">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-800 dark:text-indigo-200 text-xs font-bold uppercase tracking-wider">
+            <i data-lucide="terminal" class="w-4 h-4"></i>
+            Core Curriculum & Interactive Builder
+          </div>
+          <h2 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            A prompt is a brief, not a wish.
+          </h2>
+          <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+            One core lesson and seven live tasks. Master how to name the persona, the task, the limits, and the output format—then turn structured prompts into a complete vertical video sequence.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button type="button" onclick="window.switchTab('tasks-1-3')" class="m3-pill px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/25 flex items-center gap-2">
+              <i data-lucide="wand-2" class="w-4 h-4"></i>
+              <span>Start Tasks 1–3: Prompt & Script Lab</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+            <button type="button" onclick="window.switchTab('tasks-4-7')" class="m3-pill px-6 py-3 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm border border-slate-700/20 flex items-center gap-2">
+              <i data-lucide="film" class="w-4 h-4 text-teal-500"></i>
+              <span>Jump to Tasks 4–7: Video Production</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- One Thread & Freestyle Character Banner -->
+      <section aria-labelledby="heading-one-thread" class="space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/25">
+              <i data-lucide="message-square-lock" class="w-3.5 h-3.5"></i>
+              One Thread · One Chat, One Character, Your Story
+            </span>
+            <h3 id="heading-one-thread" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
+              Stay in one thread all session.
+            </h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400">
+            Tasks 1 through 7 build on the exact same conversation, character, and visual world.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="m3-card p-6 space-y-3 border-l-4 border-l-indigo-500">
+            <span class="inline-block px-3 py-1 text-xs font-extrabold uppercase tracking-wider rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300">
+              The One-Thread Rule
+            </span>
+            <h4 class="text-lg font-bold text-slate-900 dark:text-white">Never start a new chat mid-workflow</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Open <strong>ONE</strong> new chat in AI Tool (ChatGPT, Google Gemini & Copilot) and keep Tasks 1 to 7 in it. Because the AI remembers your earlier image, negative exclusions, script, and JSON, you can copy and reuse every output cleanly across the pipeline.
+            </p>
+          </div>
+          <div class="m3-card p-6 space-y-3 border-l-4 border-l-teal-500">
+            <span class="inline-block px-3 py-1 text-xs font-extrabold uppercase tracking-wider rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300">
+              Freestyle Your Story
+            </span>
+            <h4 class="text-lg font-bold text-slate-900 dark:text-white">Choose any character, world, and outcome</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Start from scratch with your own original character, setting, and art style—or customize the starter example in Task 1. Every prompt across Tasks 1 to 4 adapts automatically so you can steer the genre, twist, and ending however you like.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: Anatomy of a Prompt + Live General Prompt Builder -->
+      <section aria-labelledby="heading-anatomy" class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Core Principle 01</span>
+            <h3 id="heading-anatomy" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+              Anatomy of a Prompt
+            </h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400">
+            Name the persona, the task, the limits, and the output format.
+          </p>
+        </div>
+
+        <!-- Three Pillars Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Pillar 1 -->
+          <div class="m3-card p-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-heading font-extrabold text-lg">
+                01
+              </div>
+              <span class="inline-block px-3 py-1 text-xs font-extrabold uppercase tracking-wider rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300">
+                Persona and Task
+              </span>
+              <h4 class="text-xl font-bold text-slate-900 dark:text-white">Tell it who to be</h4>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                The persona is the expert you want answering. Define the role and exact objective clearly from the first sentence.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-700/20 text-xs font-mono text-slate-700 dark:text-slate-300">
+              "Act as a social media manager for a Cebu coffee brand."
+            </div>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="m3-card p-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center font-heading font-extrabold text-lg">
+                02
+              </div>
+              <span class="inline-block px-3 py-1 text-xs font-extrabold uppercase tracking-wider rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300">
+                Context and Limits
+              </span>
+              <h4 class="text-xl font-bold text-slate-900 dark:text-white">Fence the output</h4>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Give audience, tone, length, and hard limits. Vague briefs force the model to invent the details you left out.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-700/20 text-xs font-mono text-slate-700 dark:text-slate-300">
+              "Target young remote workers, warm conversational tone, max 120 words, no hashtags."
+            </div>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="m3-card p-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center font-heading font-extrabold text-lg">
+                03
+              </div>
+              <span class="inline-block px-3 py-1 text-xs font-extrabold uppercase tracking-wider rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300">
+                Format and Example
+              </span>
+              <h4 class="text-xl font-bold text-slate-900 dark:text-white">Show the shape</h4>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Name the output format, such as a table, five bullets, or a 30-second script, and paste one sample to match.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-700/20 text-xs font-mono text-slate-700 dark:text-slate-300">
+              "Output as a 3-column table (Scene, Voiceover, Visual) matching this sample..."
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Anatomy of a Prompt Sandbox -->
+        <div class="m3-card-elevated p-6 sm:p-8 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/20 pb-4">
+            <div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">
+                Interactive Brief Builder
+              </span>
+              <h4 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mt-1.5">
+                Build a Complete Prompt Brief
+              </h4>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" id="btn-anatomy-sample" class="m3-pill px-3.5 py-2 text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700">
+                Load Cebu Coffee Sample
+              </button>
+              <button type="button" id="btn-anatomy-copy" class="m3-pill px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white flex items-center gap-1.5">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Copy Brief</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="anat-persona" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                  1. Persona (Who to be)
+                </label>
+                <input id="anat-persona" type="text" value="Act as a social media manager for a Cebu coffee brand." class="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-700/30 text-sm text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label for="anat-task" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                  2. Core Task (What to do)
+                </label>
+                <input id="anat-task" type="text" value="Write a launch campaign brief for our new cold brew bottle." class="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-700/30 text-sm text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label for="anat-limits" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                  3. Context & Hard Limits
+                </label>
+                <input id="anat-limits" type="text" value="Audience: young professionals and remote workers in Cebu. Tone: warm, energetic, local pride. Hard limit: under 150 words, no clichés." class="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-700/30 text-sm text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label for="anat-format" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                  4. Format & Sample Shape
+                </label>
+                <input id="anat-format" type="text" value="Format as 5 punchy bullet points followed by a 30-second vertical reel hook." class="w-full px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-700/30 text-sm text-slate-900 dark:text-white" />
+              </div>
+            </div>
+
+            <!-- Live Assembled Brief -->
+            <div class="lg:col-span-5 flex flex-col justify-between p-5 rounded-3xl bg-slate-900 text-slate-100 border border-slate-700/40">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Compiled Prompt Brief</span>
+                  <span id="anat-score-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                    4/4 Pillars Complete
+                  </span>
+                </div>
+                <pre id="anat-output" class="text-xs sm:text-sm font-mono whitespace-pre-wrap leading-relaxed text-slate-200 pt-2"></pre>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-4 pt-3 border-t border-slate-800">
+                Ready for AI Tool (ChatGPT, Google Gemini & Copilot)
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Positive and Negative Prompts -->
+      <section aria-labelledby="heading-pos-neg" class="space-y-6">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-widest text-teal-600 dark:text-teal-400">Core Principle 02</span>
+          <h3 id="heading-pos-neg" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            Positive and Negative Prompts
+          </h3>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-1">
+            Positive prompts declare what must appear. Negative prompts remove what keeps showing up uninvited.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="m3-card p-6 space-y-3 border-l-4 border-l-teal-500">
+            <div class="flex items-center justify-between">
+              <span class="w-9 h-9 rounded-full bg-teal-500/15 text-teal-600 dark:text-teal-300 font-heading font-extrabold flex items-center justify-center">1</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">Positive</span>
+            </div>
+            <h4 class="text-lg font-bold text-slate-900 dark:text-white">State the wins</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              List subject, style, lighting, and composition in plain language. Specific nouns outperform adjectives every time.
+            </p>
+          </div>
+
+          <div class="m3-card p-6 space-y-3 border-l-4 border-l-rose-500">
+            <div class="flex items-center justify-between">
+              <span class="w-9 h-9 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-300 font-heading font-extrabold flex items-center justify-center">2</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Negative</span>
+            </div>
+            <h4 class="text-lg font-bold text-slate-900 dark:text-white">Exclude the noise</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Add a negative list for recurring faults: extra fingers, watermarks, blurry text, cluttered backgrounds.
+            </p>
+          </div>
+
+          <div class="m3-card p-6 space-y-3 border-l-4 border-l-indigo-500">
+            <div class="flex items-center justify-between">
+              <span class="w-9 h-9 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-heading font-extrabold flex items-center justify-center">3</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Priority</span>
+            </div>
+            <h4 class="text-lg font-bold text-slate-900 dark:text-white">Weight what matters</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Put the one detail that defines the shot first. Most models read earlier terms as more important.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: The Production Pipeline -->
+      <section aria-labelledby="heading-pipeline" class="space-y-6">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-widest text-amber-600 dark:text-amber-400">End-to-End Workflow</span>
+          <h3 id="heading-pipeline" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            The Prompt Engineering Pipeline
+          </h3>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-1">
+            Every asset moves through one chain: script and frames in AI Tool (ChatGPT, Google Gemini & Copilot), motion in Google Flow, voice in ElevenLabs, final cut in Clipchamp, FilmCraft or CapCut.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+          <!-- Stage 1 -->
+          <div class="m3-card-elevated p-6 sm:p-7 flex flex-col justify-between space-y-4 relative overflow-hidden">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-indigo-600 text-white">
+                  Stage 01
+                </span>
+                <i data-lucide="bot" class="w-6 h-6 text-indigo-500"></i>
+              </div>
+              <h4 class="text-xl font-extrabold text-slate-900 dark:text-white">
+                AI Tool (ChatGPT, Google Gemini & Copilot)
+              </h4>
+              <p class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                Script and frames
+              </p>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Write the five-scene script and the JSON in one thread, then run each scene text-to-image prompt to generate the frames.
+              </p>
+            </div>
+            <div class="pt-2 flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Tasks 1–5</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">One Thread · 9:16</span>
+            </div>
+          </div>
+
+          <!-- Stage 2 -->
+          <div class="m3-card-elevated p-6 sm:p-7 flex flex-col justify-between space-y-4 relative overflow-hidden">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-teal-600 text-white">
+                  Stage 02
+                </span>
+                <i data-lucide="clapperboard" class="w-6 h-6 text-teal-500"></i>
+              </div>
+              <h4 class="text-xl font-extrabold text-slate-900 dark:text-white">
+                Google Flow
+              </h4>
+              <p class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                Motion per scene
+              </p>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Upload each frame and paste its JSON so subject, action, and camera movement drive the shot.
+              </p>
+            </div>
+            <div class="pt-2 flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Task 6</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">6-Field Scene JSON</span>
+            </div>
+          </div>
+
+          <!-- Stage 3 -->
+          <div class="m3-card-elevated p-6 sm:p-7 flex flex-col justify-between space-y-4 relative overflow-hidden">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-600 text-white">
+                  Stage 03
+                </span>
+                <i data-lucide="mic" class="w-6 h-6 text-amber-500"></i>
+              </div>
+              <h4 class="text-xl font-extrabold text-slate-900 dark:text-white">
+                ElevenLabs + Editor
+              </h4>
+              <p class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                Voice and final cut
+              </p>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Generate the voiceover free at elevenlabs.io, then stitch the clips and sync audio in Clipchamp, FilmCraft or CapCut.
+              </p>
+            </div>
+            <div class="pt-2 flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Task 7</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">ElevenLabs · 0.7x · 50s</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==========================================
+         TAB 2: TASKS 1–3 (PROMPT & SCRIPT LAB)
+    =========================================== -->
+    <div id="tab-tasks-1-3" role="tabpanel" aria-labelledby="tab-nav-tasks-1-3" class="tab-panel hidden space-y-12">
+
+      <!-- TASK 1: POSITIVE PROMPTING -->
+      <section id="section-task-1" aria-labelledby="heading-task-1" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-indigo-600 text-white">Task 1</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
+                Positive prompting · AI Tool (ChatGPT, Google Gemini & Copilot) · 10 minutes
+              </span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/25">
+                <i data-lucide="link-2" class="w-3.5 h-3.5"></i>
+                Live-linked to Task 2
+              </span>
+            </div>
+            <h2 id="heading-task-1" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Describe what you want in full, specific detail.
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              In a <strong>NEW</strong> chat, freestyle one positive prompt for your chosen character or subject—naming subject, setting, art style, palette, lighting, lens, and depth of field—then generate it in AI Tool (ChatGPT, Google Gemini & Copilot). Any detail you change here automatically updates Task 2's opposite exclusions, Task 3's script style, and Task 4's JSON constraints.
+            </p>
+          </div>
+          <label class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-700/20 cursor-pointer select-none self-start">
+            <input type="checkbox" data-task-check="task1" class="task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Mark Task 1 Complete</span>
+          </label>
+        </div>
+
+        <!-- Steps & Starter Example Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 space-y-4">
+            <div class="m3-card p-5 space-y-3">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                Run These Steps (Build One Layer at a Time)
+              </h3>
+              <ol class="space-y-2 text-sm text-slate-700 dark:text-slate-300 font-medium">
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 text-xs font-bold flex items-center justify-center">1</span> Open ONE new chat; invent any character and action</li>
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 text-xs font-bold flex items-center justify-center">2</span> Add setting, time of day, and mood</li>
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 text-xs font-bold flex items-center justify-center">3</span> Pick any art style, palette, and lighting</li>
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 text-xs font-bold flex items-center justify-center">4</span> Pick lens & depth of field, then generate Version A</li>
+              </ol>
+            </div>
+
+            <div class="m3-card p-5 space-y-3 bg-indigo-950/5 dark:bg-indigo-950/30">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                  Optional Starter Example
+                </h3>
+                <div class="flex items-center gap-3">
+                  <button type="button" id="btn-clear-task1-freestyle" class="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline">
+                    Clear to Freestyle
+                  </button>
+                  <button type="button" id="btn-load-task1-class" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                    Load Starter
+                  </button>
+                </div>
+              </div>
+              <p class="text-xs sm:text-sm font-mono text-slate-700 dark:text-slate-300 leading-relaxed">
+                "A weathered older traveler in a heavy wool coat and knit cap, gazing out toward the horizon, standing on a fog-covered coastal cliff at dawn, oil painting style, muted palette, Rembrandt lighting, 35mm lens, shallow depth of field, warm rim light."
+              </p>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                Replace the subject, setting, and style layers on the right with any character, world, or concept of your own.
+              </p>
+            </div>
+          </div>
+
+          <!-- Interactive Task 1 Swap Menu Builder -->
+          <div class="lg:col-span-7 m3-card p-5 sm:p-6 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">
+                Task 1 Options · Swap Menu (Change One Layer, Change Everything)
+              </h3>
+              <span class="text-xs text-teal-600 dark:text-teal-400 font-semibold flex items-center gap-1">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                Auto-mirrors opposites in Task 2
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="t1-subject" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1">1. Subject & Action (Freestyle)</label>
+                <input id="t1-subject" type="text" placeholder="e.g. A young street chef plating noodles in a linen apron" value="A weathered older traveler in a heavy wool coat and knit cap, gazing out toward the horizon" class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-700/25 text-xs sm:text-sm" />
+              </div>
+              <div>
+                <label for="t1-setting" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1">2. Setting, Time & Mood (Freestyle)</label>
+                <input id="t1-setting" type="text" placeholder="e.g. inside a rain-soaked neon night market" value="standing on a fog-covered coastal cliff at dawn" class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-700/25 text-xs sm:text-sm" />
+              </div>
+            </div>
+
+            <!-- Swap Pill Selectors -->
+            <div class="space-y-3">
+              <div>
+                <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">Art Style</span>
+                <div id="t1-style-pills" class="flex flex-wrap gap-1.5"></div>
+              </div>
+              <div>
+                <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">Palette</span>
+                <div id="t1-palette-pills" class="flex flex-wrap gap-1.5"></div>
+              </div>
+              <div>
+                <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">Lighting</span>
+                <div id="t1-lighting-pills" class="flex flex-wrap gap-1.5"></div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">Lens</span>
+                  <div id="t1-lens-pills" class="flex flex-wrap gap-1.5"></div>
+                </div>
+                <div>
+                  <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">Accent & Depth</span>
+                  <div id="t1-accent-pills" class="flex flex-wrap gap-1.5"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Compiled Task 1 Output -->
+            <div class="p-4 rounded-2xl bg-slate-900 text-slate-100 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Task 1 Positive Prompt Output</span>
+                <button type="button" id="btn-copy-t1" class="m3-pill px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>Copy Prompt</span>
+                </button>
+              </div>
+              <p id="t1-compiled-output" class="text-xs sm:text-sm font-mono text-slate-200 leading-relaxed"></p>
+              <div class="text-[11px] text-amber-300/90 flex items-center gap-1.5 pt-1 border-t border-slate-800">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                <span><strong>Deliverable:</strong> Screenshot of the prompt and the image, saved in your project folder (computer and Google Drive).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASK 2: POSITIVE AND NEGATIVE PROMPTS -->
+      <section id="section-task-2" aria-labelledby="heading-task-2" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-rose-600 text-white">Task 2</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-500/15 text-rose-700 dark:text-rose-300">
+                Positive and negative prompts · AI Tool (ChatGPT, Google Gemini & Copilot) · 10 minutes
+              </span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/25">
+                <i data-lucide="link-2" class="w-3.5 h-3.5"></i>
+                Synced from Task 1
+              </span>
+            </div>
+            <h2 id="heading-task-2" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Add a negative list to control the result.
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              In the <strong>same thread</strong>, re-paste your Task 1 prompt with a Negative Prompts block beneath it to generate <strong>Version B</strong>. Keep <strong>Version A</strong> in the thread so you can compare side by side.
+            </p>
+          </div>
+          <label class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-700/20 cursor-pointer select-none self-start">
+            <input type="checkbox" data-task-check="task2" class="task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Mark Task 2 Complete</span>
+          </label>
+        </div>
+
+        <!-- Live Connection & Auto-Mirror Summary Bar -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-indigo-500/10 dark:bg-indigo-950/40 border border-indigo-500/25 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <i data-lucide="arrow-left-right" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-700 dark:text-indigo-300">
+                Live Mirror Sync from Task 1 (Positive Selection → Auto-Excluded Opposites)
+              </span>
+            </div>
+            <button type="button" id="btn-resync-t2-opposites" class="m3-pill px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold flex items-center gap-1">
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+              <span>Re-sync Opposites</span>
+            </button>
+          </div>
+          <div id="t2-live-mirror-summary" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <!-- Populated live by JS from Task 1 Subject, Setting, and Style/Visual pills -->
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left Column: Steps & Mirror Guide -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="m3-card p-5 space-y-3">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+                Run These Steps (Same Thread, Version B vs. Version A)
+              </h3>
+              <ol class="space-y-2 text-sm text-slate-700 dark:text-slate-300 font-medium">
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-bold flex items-center justify-center">1</span> Stay in the same thread</li>
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-bold flex items-center justify-center">2</span> Re-paste your Task 1 prompt</li>
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-bold flex items-center justify-center">3</span> Add Negative Prompts: mandatory list plus mirror terms</li>
+                <li class="flex items-center gap-2.5"><span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-bold flex items-center justify-center">4</span> Generate as Version B, compare with Version A</li>
+              </ol>
+            </div>
+
+            <div class="m3-card p-5 space-y-3">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                Extra Mirror Presets (Optional One-Click Add)
+              </h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400">
+                Task 1 selections automatically mirror opposites on the right. Click any extra preset below if you want additional exclusions:
+              </p>
+              <div class="space-y-2 text-xs">
+                <button type="button" data-mirror="young man, clean-shaven, flawless skin" class="mirror-preset-btn w-full text-left p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-500/15 border border-slate-700/20 flex items-center justify-between">
+                  <span><strong>Older/weathered subject?</strong> Exclude: young man, clean-shaven, flawless skin</span>
+                  <i data-lucide="plus-circle" class="w-4 h-4 text-rose-500 shrink-0"></i>
+                </button>
+                <button type="button" data-mirror="clear sky, bright midday, harsh sun" class="mirror-preset-btn w-full text-left p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-500/15 border border-slate-700/20 flex items-center justify-between">
+                  <span><strong>Fog, dawn, or moody?</strong> Exclude: clear sky, bright midday, harsh sun</span>
+                  <i data-lucide="plus-circle" class="w-4 h-4 text-rose-500 shrink-0"></i>
+                </button>
+                <button type="button" data-mirror="photorealistic, 3D render, anime" class="mirror-preset-btn w-full text-left p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-500/15 border border-slate-700/20 flex items-center justify-between">
+                  <span><strong>Painted/illustrated?</strong> Exclude: photorealistic, 3D render, anime</span>
+                  <i data-lucide="plus-circle" class="w-4 h-4 text-rose-500 shrink-0"></i>
+                </button>
+                <button type="button" data-mirror="crowd, busy background, smiling, cityscape" class="mirror-preset-btn w-full text-left p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-500/15 border border-slate-700/20 flex items-center justify-between">
+                  <span><strong>Calm, minimal coastal shot?</strong> Exclude: crowd, busy background, smiling, cityscape</span>
+                  <i data-lucide="plus-circle" class="w-4 h-4 text-rose-500 shrink-0"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Exclusion Chips & Output -->
+          <div class="lg:col-span-7 m3-card p-5 sm:p-6 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">
+                Task 2 Options · Mandatory + Auto-Mirrored Opposites
+              </h3>
+              <button type="button" id="btn-reset-t2-class" class="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline">
+                Reset to Class Default + Sync
+              </button>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-2">
+                  1. Mandatory Technical Faults (Always Exclude)
+                </span>
+                <div id="t2-mandatory-pills" class="flex flex-wrap gap-1.5"></div>
+              </div>
+
+              <div>
+                <span class="block text-xs font-bold uppercase text-indigo-600 dark:text-indigo-400 mb-2">
+                  2. Auto-Mirrored Opposites from Task 1 (Updates Live)
+                </span>
+                <div id="t2-auto-mirror-pills" class="flex flex-wrap gap-1.5"></div>
+              </div>
+
+              <div>
+                <span class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-2">
+                  3. Additional Optional Exclusions
+                </span>
+                <div id="t2-extra-pills" class="flex flex-wrap gap-1.5"></div>
+              </div>
+            </div>
+
+            <!-- Combined Task 2 Prompt Output -->
+            <div class="p-4 rounded-2xl bg-slate-900 text-slate-100 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Task 2 Combined Output (Version B Prompt)</span>
+                <button type="button" id="btn-copy-t2" class="m3-pill px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-1.5">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>Copy Version B Prompt</span>
+                </button>
+              </div>
+              <pre id="t2-compiled-output" class="text-xs sm:text-sm font-mono whitespace-pre-wrap text-slate-200 leading-relaxed"></pre>
+              <div class="text-[11px] text-amber-300/90 flex items-center gap-1.5 pt-1 border-t border-slate-800">
+                <i data-lucide="columns" class="w-3.5 h-3.5"></i>
+                <span><strong>Deliverable:</strong> Version A and Version B screenshots, side by side.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASK 3: 50-SECOND VIDEO SCRIPT -->
+      <section id="section-task-3" aria-labelledby="heading-task-3" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-indigo-600 text-white">Task 3</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
+                50-second video script · AI Tool (ChatGPT, Google Gemini & Copilot) · 15 minutes
+              </span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/25">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                Freestyle · Syncs Task 1 & 2 Style
+              </span>
+            </div>
+            <h2 id="heading-task-3" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Five scenes, fifty seconds, one clear payoff.
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              In the <strong>same thread</strong>, customize the hook, tone, and optional story outcome below, then paste the generic master prompt into your AI Tool. The AI writes a complete 5-scene script for <strong>your character and story</strong>—with voiceover, on-screen text, image prompts, and negative prompts you will reuse in Tasks 5 and 7.
+            </p>
+          </div>
+          <label class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-700/20 cursor-pointer select-none self-start">
+            <input type="checkbox" data-task-check="task3" class="task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Mark Task 3 Complete</span>
+          </label>
+        </div>
+
+        <!-- Hook Style, Tone & Story Outcome Customizer + Generic Master Script Prompt -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 m3-card p-5 space-y-4">
+            <h3 class="text-sm font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+              Task 3 Options · Freestyle Story & Tone Controls
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400">
+              Shape how your story opens, sounds, and ends. Leave the story direction blank to let the AI invent an original arc, or type any plot twist, lesson, or ending you want.
+            </p>
+            <div>
+              <span class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">Opening Hook Style (0 to 10 sec)</span>
+              <div id="t3-hook-pills" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div>
+              <span class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1.5">Voiceover Tone</span>
+              <div id="t3-tone-pills" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div>
+              <label for="t3-story-direction" class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">
+                Story Direction, Twist, or Outcome (Optional Freestyle)
+              </label>
+              <textarea id="t3-story-direction" rows="2" placeholder="Optional: e.g. Turn this into a comeback story, add an unexpected twist in Scene 3, or end with a bittersweet choice..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-700/30 text-xs sm:text-sm text-slate-900 dark:text-white"></textarea>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-teal-500/10 border border-teal-500/25 text-xs text-slate-700 dark:text-slate-300 space-y-1">
+              <div class="font-extrabold uppercase text-teal-700 dark:text-teal-300">Fixed 50-Second Structure</div>
+              <div>1. <strong>SCENE 1 HOOK</strong> (0–10s) · 2. <strong>CONTEXT</strong> (10–20s) · 3. <strong>RE-HOOK</strong> (20–30s) · 4. <strong>VALUE</strong> (30–40s) · 5. <strong>REWARD</strong> (40–50s)</div>
+            </div>
+          </div>
+
+          <!-- Master Copy-and-Paste Prompt Box -->
+          <div class="lg:col-span-7 m3-card p-5 bg-slate-900 text-slate-100 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Copy & Paste Generic Master Prompt (Same Thread)</span>
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <button type="button" id="btn-open-script-modal" class="m3-pill px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-teal-300 text-xs font-bold flex items-center gap-1">
+                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                    <span>5-Scene Structure Guide</span>
+                  </button>
+                  <button type="button" id="btn-reset-t3-class-prompt" class="m3-pill px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 text-xs font-bold">
+                    Reset Defaults
+                  </button>
+                  <button type="button" id="btn-copy-t3-master-prompt" class="m3-pill px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span>Copy Master Prompt</span>
+                  </button>
+                </div>
+              </div>
+              <pre id="t3-master-prompt" class="text-xs font-mono whitespace-pre-wrap text-slate-200 bg-slate-950/80 p-3.5 rounded-2xl max-h-96 overflow-y-auto leading-relaxed border border-slate-800"></pre>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800">
+              <span class="text-[11px] text-amber-300"><strong>Deliverable:</strong> Screenshot of the full script with timecodes.</span>
+              <span class="text-[11px] text-slate-400">Keep the AI Tool's output in this thread for Tasks 4, 5 & 7.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==========================================
+         TAB 3: TASKS 4–7 (VIDEO PRODUCTION CHAIN)
+    =========================================== -->
+    <div id="tab-tasks-4-7" role="tabpanel" aria-labelledby="tab-nav-tasks-4-7" class="tab-panel hidden space-y-12">
+
+      <!-- TASK 4: PROMPT TWEAKING (JSON STRUCTURE) -->
+      <section id="section-task-4" aria-labelledby="heading-task-4" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-teal-600 text-white">Task 4</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-500/15 text-teal-700 dark:text-teal-300">
+                Prompt tweaking (JSON) · AI Tool (ChatGPT, Google Gemini & Copilot) · 15 minutes
+              </span>
+            </div>
+            <h2 id="heading-task-4" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Rewrite the prompt into a structure the model can follow.
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              In the <strong>same thread</strong> right beneath your Task 3 script, paste the generic JSON conversion prompt below. Your AI Tool will convert your five custom scenes into five standalone 6-field JSON blocks (<code>1.</code> to <code>5.</code>) tailored to your character, story outcome, and exclusions.
+            </p>
+          </div>
+          <label class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-700/20 cursor-pointer select-none self-start">
+            <input type="checkbox" data-task-check="task4" class="task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Mark Task 4 Complete</span>
+          </label>
+        </div>
+
+        <!-- Master Copy-and-Paste Generic JSON Prompt Box -->
+        <div class="p-5 rounded-3xl bg-slate-900 text-slate-100 border border-slate-700/50 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                Same Thread · Auto-Synced with Task 2 Exclusions
+              </span>
+              <span class="text-xs font-bold uppercase tracking-wider text-teal-400">
+                Copy & Paste Generic JSON Conversion Prompt
+              </span>
+            </div>
+            <button type="button" id="btn-copy-t4-master-prompt" class="m3-pill px-4 py-1.5 bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold flex items-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy Master JSON Prompt</span>
+            </button>
+          </div>
+          <pre id="t4-master-json-prompt" class="text-xs font-mono whitespace-pre-wrap text-slate-200 bg-slate-950/80 p-4 rounded-2xl max-h-80 overflow-y-auto leading-relaxed border border-slate-800"></pre>
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800 text-[11px]">
+            <span class="text-amber-300/90 flex items-center gap-1.5">
+              <i data-lucide="code" class="w-3.5 h-3.5"></i>
+              <span><strong>Deliverable:</strong> Screenshot of the full numbered JSON output (1. to 5.) generated by your AI Tool.</span>
+            </span>
+            <span class="text-slate-400">You will copy each generated JSON block directly from your AI Tool thread in Task 6.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASK 5: TEXT TO IMAGE -->
+      <section id="section-task-5" aria-labelledby="heading-task-5" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-teal-600 text-white">Task 5</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-500/15 text-teal-700 dark:text-teal-300">
+                Text to image · AI Tool (ChatGPT, Google Gemini & Copilot) · 15 minutes
+              </span>
+            </div>
+            <h2 id="heading-task-5" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Generate every scene with the same character.
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Stay inside your <strong>same single thread</strong>. Do not invent new prompts here—scroll up to the <strong>Task 3 script generated by your AI Tool</strong>, then copy and paste each scene's <strong>Text to Image Prompt (C)</strong> together with its <strong>Negative Prompt (D)</strong> one by one to generate all five frames.
+            </p>
+          </div>
+          <label class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-700/20 cursor-pointer select-none self-start">
+            <input type="checkbox" data-task-check="task5" class="task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Mark Task 5 Complete</span>
+          </label>
+        </div>
+
+        <!-- Single-Thread Instructions & Continuity Check -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-6 m3-card p-5 space-y-3">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-teal-600 dark:text-teal-400">How to Run Task 5 (From Your Single Thread)</span>
+            <ol class="text-xs sm:text-sm space-y-2 text-slate-700 dark:text-slate-300 font-medium list-decimal list-inside">
+              <li>Scroll up in your <strong>same AI Tool thread</strong> to your generated <strong>Task 3 script</strong>.</li>
+              <li>Copy <strong>Scene 1's Text to Image Prompt</strong> and its <strong>Negative Prompt</strong> directly from that reply.</li>
+              <li>Paste both into the bottom of the <strong>same thread</strong> (or write: <em>"Generate Scene 1 using the Text to Image Prompt and Negative Prompt from above"</em>).</li>
+              <li>Inspect the image for face, wardrobe, and style continuity, then repeat for <strong>Scenes 2, 3, 4, and 5</strong>. Regenerate any frame that drifts.</li>
+            </ol>
+          </div>
+          <div class="lg:col-span-6 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col justify-between gap-4">
+            <div class="space-y-2">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-300">Single-Thread Continuity Verification</span>
+              <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
+                Before generating each frame, confirm that the prompt copied from your AI Tool includes your chosen visual style from Task 1, ends with <code class="px-1.5 py-0.5 rounded bg-amber-500/20 font-mono font-bold">consistent character and clothing, vertical 9:16</code>, and includes its <strong>Negative prompt</strong> block right below it.
+              </p>
+            </div>
+            <div class="text-xs font-semibold text-amber-800 dark:text-amber-200 pt-2 border-t border-amber-500/20">
+              <strong>Deliverable:</strong> Screenshots of all five scene images, with the negative prompt visible for Scene 1.
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive 5-Frame Single-Thread Progress Tracker (No Pre-Written Prompts) -->
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+              5-Frame Generation Tracker (Copy Prompts Directly From Your Task 3 Thread Reply)
+            </h3>
+            <span class="text-xs text-slate-500">Check off each frame as you generate & download it</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 1</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Hook (0–10s)</div>
+              <p class="text-slate-600 dark:text-slate-400">Copy Scene 1 Image + Negative prompt from your Task 3 AI Tool output.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 2</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Context (10–20s)</div>
+              <p class="text-slate-600 dark:text-slate-400">Copy Scene 2 Image + Negative prompt from your Task 3 AI Tool output.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 3</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Re-Hook (20–30s)</div>
+              <p class="text-slate-600 dark:text-slate-400">Copy Scene 3 Image + Negative prompt from your Task 3 AI Tool output.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 4</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Value (30–40s)</div>
+              <p class="text-slate-600 dark:text-slate-400">Copy Scene 4 Image + Negative prompt from your Task 3 AI Tool output.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-teal-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-teal-600 text-white">Scene 5</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-teal-600 focus:ring-teal-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Reward (40–50s)</div>
+              <p class="text-slate-600 dark:text-slate-400">Copy Scene 5 Image + Negative prompt from your Task 3 AI Tool output.</p>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASK 6: IMAGE TO VIDEO (GOOGLE FLOW) -->
+      <section id="section-task-6" aria-labelledby="heading-task-6" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-indigo-600 text-white">Task 6</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
+                Image to video · Google Flow · 15 minutes
+              </span>
+            </div>
+            <h2 id="heading-task-6" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              The image sets the look; the JSON sets the motion.
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Open <strong>Google Flow</strong>, upload each scene image you generated in <strong>Task 5</strong>, and <strong>copy and paste the matching standalone JSON block (1. to 5.)</strong> directly from your <strong>Task 4 reply in the same AI Tool thread</strong>.
+            </p>
+          </div>
+          <label class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-700/20 cursor-pointer select-none self-start">
+            <input type="checkbox" data-task-check="task6" class="task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Mark Task 6 Complete</span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="m3-card p-5 space-y-2.5">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Run These Steps (Use Your Task 4 Thread Output)</span>
+            <ol class="text-xs sm:text-sm space-y-1.5 text-slate-700 dark:text-slate-300 font-medium list-decimal list-inside">
+              <li>Open <strong>Google Flow</strong> and start a new vertical 9:16 project.</li>
+              <li>Upload your <strong>Scene 1 image</strong> generated in Task 5.</li>
+              <li>Return to your <strong>single AI Tool thread</strong>, copy <strong>JSON Block 1</strong> from your Task 4 reply (including its curly brackets <code>{ ... }</code>), and paste it into the Google Flow prompt box.</li>
+              <li>Generate and download the clip, then repeat for <strong>Scenes 2 to 5</strong> using Blocks 2–5 from your thread.</li>
+            </ol>
+          </div>
+          <div class="m3-card p-5 space-y-2.5 flex flex-col justify-between bg-indigo-950/5 dark:bg-indigo-950/30">
+            <div class="space-y-2">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-teal-600 dark:text-teal-400">Single-Thread Handoff Reminder</span>
+              <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                Because your Task 4 JSON blocks were generated directly from your own Task 3 script in the same thread, every block already matches your custom character, setting, camera motion, and <code>negative_prompt</code> (with spoken audio and text suppressed so your ElevenLabs voiceover stays clean).
+              </p>
+            </div>
+            <p class="text-xs text-amber-700 dark:text-amber-300 font-semibold pt-2 border-t border-slate-700/15">
+              <strong>Deliverable:</strong> All five exported 10-second clips plus a prompt screenshot in Google Flow.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive 5-Clip Single-Thread Tracker (No Pre-Written JSON Prompts) -->
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+              5-Clip Motion Tracker (Copy JSON Blocks 1–5 From Your Task 4 Thread Reply)
+            </h3>
+            <span class="text-xs text-slate-500">Check off each clip once generated & downloaded</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 1</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Frame 1 + JSON #1</div>
+              <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 1 & paste JSON Block 1 from your Task 4 reply.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 2</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Frame 2 + JSON #2</div>
+              <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 2 & paste JSON Block 2 from your Task 4 reply.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 3</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Frame 3 + JSON #3</div>
+              <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 3 & paste JSON Block 3 from your Task 4 reply.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 4</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Frame 4 + JSON #4</div>
+              <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 4 & paste JSON Block 4 from your Task 4 reply.</p>
+            </label>
+            <label class="m3-card p-4 space-y-2 cursor-pointer hover:border-indigo-500/50 transition-colors">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full font-extrabold bg-indigo-600 text-white">Clip 5</span>
+                <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white">Frame 5 + JSON #5</div>
+              <p class="text-slate-600 dark:text-slate-400">Upload Task 5 Frame 5 & paste JSON Block 5 from your Task 4 reply.</p>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASK 7: VIDEO TO VOICEOVER (ELEVENLABS + VIDEO EDITOR) -->
+      <section id="section-task-7" aria-labelledby="heading-task-7" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-amber-600 text-white">Task 7</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300">
+                Video to voiceover · ElevenLabs + video editor · 20 minutes
+              </span>
+            </div>
+            <h2 id="heading-task-7" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Give the cut a voice and the story lands.
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Copy the 5 voiceover lines from your <strong>Task 3 AI Tool script</strong> into <strong>elevenlabs.io</strong> to generate your free narration, then stitch your five Google Flow clips and sync the audio and on-screen captions in <strong>Clipchamp</strong>, <strong>FilmCraft</strong>, or <strong>CapCut</strong>.
+            </p>
+          </div>
+          <label class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-700/20 cursor-pointer select-none self-start">
+            <input type="checkbox" data-task-check="task7" class="task-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Mark Task 7 Complete</span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Steps & Class Settings -->
+          <div class="m3-card p-5 space-y-4">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+              Run These Steps (Voiceover, Stitch, Sync, Export)
+            </h3>
+            <ol class="space-y-2 text-sm text-slate-700 dark:text-slate-300 font-medium list-decimal list-inside">
+              <li>Copy your 5 <strong>Voiceover (A)</strong> lines from your Task 3 thread reply into <strong>elevenlabs.io</strong> and download the MP3</li>
+              <li>Pick a free editor: Clipchamp, FilmCraft, or CapCut</li>
+              <li>Stitch the five Google Flow clips in scene order (1 to 5)</li>
+              <li>Sync the voiceover and add your <strong>Text on Screen (B)</strong> captions, then export</li>
+            </ol>
+            <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-1.5 text-xs">
+              <div class="font-extrabold uppercase text-amber-800 dark:text-amber-300">Class Settings (Default)</div>
+              <div>• Tool 1: <strong>ElevenLabs (free · elevenlabs.io)</strong></div>
+              <div>• Tool 2: <strong>Clipchamp, FilmCraft or CapCut (free)</strong></div>
+              <div>• Voice speed: <strong>0.7x</strong></div>
+              <div>• Consistency: <strong>Same voice for all scenes</strong></div>
+              <div>• Export: <strong>Vertical 9:16, about 50 seconds</strong></div>
+            </div>
+          </div>
+
+          <!-- Interactive Voice Option Selector -->
+          <div class="m3-card p-5 space-y-3">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+              Task 7 Options · ElevenLabs Voice Guide
+            </h3>
+            <p class="text-xs text-slate-500">Choose a voice tone that fits your story and keep the same voice across all five scenes:</p>
+            <div id="t7-voice-container" class="space-y-2.5 text-xs sm:text-sm">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Voice Speed Guide & Thread Source Reminder -->
+          <div class="m3-card p-5 space-y-3 flex flex-col justify-between">
+            <div class="space-y-3">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                Voice Speed Guide & Pacing
+              </h3>
+              <div id="t7-speed-container" class="space-y-2 text-xs">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 space-y-1.5 text-xs">
+              <div class="font-extrabold uppercase text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5">
+                <i data-lucide="message-square-text" class="w-3.5 h-3.5"></i>
+                <span>From Your Single Thread (Task 3)</span>
+              </div>
+              <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Copy <strong>A. Voiceover</strong> from Scenes 1–5 in your AI Tool thread to paste into <strong>elevenlabs.io</strong>, and copy <strong>B. Text on Screen</strong> for your editor captions.
+              </p>
+              <p class="text-[11px] text-amber-700 dark:text-amber-300 font-semibold pt-1">
+                <strong>Deliverable:</strong> The finished vertical video (9:16, ~50 seconds) with voiceover.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==========================================
+         TAB 4: SAVING YOUR OUTPUTS & DELIVERABLES
+    =========================================== -->
+    <div id="tab-deliverables" role="tabpanel" aria-labelledby="tab-nav-deliverables" class="tab-panel hidden space-y-10">
+
+      <!-- Reminder: Saving Your Outputs -->
+      <section aria-labelledby="heading-saving" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="space-y-2 border-b border-slate-700/20 pb-5">
+          <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-indigo-600 text-white">
+            Output Management & Organization
+          </span>
+          <h2 id="heading-saving" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white pt-1">
+            Reminder: Saving Your Outputs
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300">
+            Save every screenshot for Energizer and Task activities in both places — then organize them by activity.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="m3-card p-5 space-y-2">
+            <span class="w-8 h-8 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 font-heading font-extrabold text-sm flex items-center justify-center">1</span>
+            <h3 class="font-bold text-slate-900 dark:text-white">Save on Windows</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Create a dedicated project folder on your computer and save all screenshots there.
+            </p>
+          </div>
+          <div class="m3-card p-5 space-y-2">
+            <span class="w-8 h-8 rounded-full bg-teal-500/15 text-teal-600 dark:text-teal-400 font-heading font-extrabold text-sm flex items-center justify-center">2</span>
+            <h3 class="font-bold text-slate-900 dark:text-white">Save on Google Drive</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Create the same folder on your Google Drive and upload the screenshots.
+            </p>
+          </div>
+          <div class="m3-card p-5 space-y-2">
+            <span class="w-8 h-8 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 font-heading font-extrabold text-sm flex items-center justify-center">3</span>
+            <h3 class="font-bold text-slate-900 dark:text-white">Add sub tabs in Google Docs</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Create the main tab in Google Docs, then create a subtab for each activity.
+            </p>
+          </div>
+          <div class="m3-card p-5 space-y-2">
+            <span class="w-8 h-8 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 font-heading font-extrabold text-sm flex items-center justify-center">4</span>
+            <h3 class="font-bold text-slate-900 dark:text-white">Email your outputs</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Send every activity's outputs by email — output files plus screenshots of the energizer and task activities.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7-Task Deliverable Summary & Checklist -->
+      <section aria-labelledby="heading-task-summary" class="m3-card-elevated p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/20 pb-5">
+          <div>
+            <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-teal-600 text-white">
+              Session Deliverables
+            </span>
+            <h3 id="heading-task-summary" class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1.5">
+              7-Task Deliverable Reference
+            </h3>
+          </div>
+          <button type="button" onclick="document.getElementById('btn-export-all').click()" class="m3-pill px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 self-start sm:self-auto shadow-md shadow-indigo-600/20">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Download Complete Task Workbook (.txt)</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div class="m3-card p-4 space-y-1.5">
+            <div class="font-extrabold text-indigo-600 dark:text-indigo-400">Task 1 · Positive Prompting</div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs">Screenshot of your positive prompt and the generated image (Version A), saved in your project folder (computer and Google Drive).</p>
+          </div>
+          <div class="m3-card p-4 space-y-1.5">
+            <div class="font-extrabold text-rose-600 dark:text-rose-400">Task 2 · Positive & Negative Prompts</div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs">Version A and Version B screenshots, side by side.</p>
+          </div>
+          <div class="m3-card p-4 space-y-1.5">
+            <div class="font-extrabold text-indigo-600 dark:text-indigo-400">Task 3 · 50-Second Video Script</div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs">Screenshot of your full 5-scene custom video script with timecodes (0–50 seconds).</p>
+          </div>
+          <div class="m3-card p-4 space-y-1.5">
+            <div class="font-extrabold text-teal-600 dark:text-teal-400">Task 4 · Prompt Tweaking (JSON)</div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs">Screenshot of the full numbered standalone 6-field JSON output (1. to 5.) from your AI Tool thread.</p>
+          </div>
+          <div class="m3-card p-4 space-y-1.5">
+            <div class="font-extrabold text-teal-600 dark:text-teal-400">Task 5 · Text to Image</div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs">Screenshots of all five consistent-character scene images generated from your Task 3 prompts, with the negative prompt visible for Scene 1.</p>
+          </div>
+          <div class="m3-card p-4 space-y-1.5">
+            <div class="font-extrabold text-indigo-600 dark:text-indigo-400">Task 6 · Image to Video (Google Flow)</div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs">The five exported 10-second clips generated from your Task 4 JSON blocks, plus a prompt screenshot.</p>
+          </div>
+          <div class="m3-card p-4 space-y-1.5 md:col-span-2 lg:col-span-3">
+            <div class="font-extrabold text-amber-600 dark:text-amber-400">Task 7 · Video to Voiceover (ElevenLabs + Clipchamp, FilmCraft or CapCut)</div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs">The finished vertical (9:16) video (~50 seconds) with free ElevenLabs voiceover (0.7x speed, same voice across all scenes) stitched and synced in Clipchamp, FilmCraft, or CapCut.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 5-Scene Structure Blueprint Modal (Generic) -->
+  <div id="script-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-slate-900 border border-slate-700/50 rounded-3xl p-6 sm:p-8 space-y-6 text-slate-100 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+            Freestyle Storytelling Blueprint
+          </span>
+          <h3 id="modal-title" class="text-xl font-bold text-white mt-1">
+            50-Second Cinematic Video Structure (5 Scenes · 10s Each)
+          </h3>
+        </div>
+        <button type="button" id="btn-close-modal" class="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white" aria-label="Close modal">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+        Every scene generated by your AI Tool in Task 3 follows this 5-beat storytelling arc and outputs four reusable pieces: <strong>A. Voiceover (12–20 words)</strong>, <strong>B. Text on Screen (ALL CAPS, ≤8 words)</strong>, <strong>C. Text to Image Prompt</strong>, and <strong>D. Negative Prompt</strong>.
+      </p>
+
+      <div class="space-y-3 text-xs sm:text-sm">
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="font-bold text-indigo-400">SCENE 1 · HOOK (0 to 10 sec) · Medium Shot</div>
+          <p class="text-slate-300">Establish your chosen setting, introduce your character exactly as built in Task 1 & 2, and open with a scroll-stopping hook.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="font-bold text-teal-400">SCENE 2 · CONTEXT (10 to 20 sec) · Focused Detail</div>
+          <p class="text-slate-300">Show the character's daily routine, goal, or central conflict through a closer visual detail.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="font-bold text-indigo-400">SCENE 3 · RE-HOOK (20 to 30 sec) · Movement / Traversal</div>
+          <p class="text-slate-300">Introduce a turning point, obstacle, surprise twist, or shift in perspective to hold attention mid-video.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="font-bold text-amber-400">SCENE 4 · VALUE (30 to 40 sec) · Intimate Close-Up</div>
+          <p class="text-slate-300">Reveal the deeper meaning, emotional realization, or core takeaway of your story.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="font-bold text-teal-400">SCENE 5 · REWARD (40 to 50 sec) · Wide Atmospheric Shot</div>
+          <p class="text-slate-300">Resolve the story with your chosen outcome—triumphant, unexpected, reflective, or open-ended—and a memorable final line.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-slate-800">
+        <button type="button" id="btn-modal-done" class="m3-pill px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm">
+          Got It
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div id="toast-notification" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
+    <div class="px-5 py-3 rounded-full bg-slate-900 dark:bg-indigo-600 text-white text-xs sm:text-sm font-bold shadow-2xl flex items-center gap-2 border border-white/15">
+      <i data-lucide="check-circle" class="w-4 h-4 text-teal-300"></i>
+      <span id="toast-message">Copied to clipboard!</span>
+    </div>
+  </div>
+
+  <script>
+    // --- CORE CONSTANTS & LIVE SYNC MAPS ---
+    const MANDATORY_NEGATIVES = [
+      'distorted anatomy', 'extra limbs', 'deformed hands', 'duplicate person',
+      'blurry', 'fisheye', 'oversaturated colours', 'watermark', 'garbled text',
+      'cluttered background', 'low resolution'
+    ];
+
+    const OPTIONAL_EXTRA_NEGATIVES = [
+      'flawless skin', 'harsh sun', 'smiling', 'cityscape', 'crowd', 'busy background'
+    ];
+
+    const CONTINUITY_NEGATIVE_GUARDS = [
+      'distorted face', 'signature', 'cropped', 'out of frame',
+      'inconsistent character', 'changing clothes'
+    ];
+
+    const MOTION_SILENCE_NEGATIVE_GUARDS = [
+      'text', 'voiceover', 'speaking', 'talking', 'lip movement'
+    ];
+
+    // --- TASK 1 -> TASK 2 AUTOMATIC OPPOSITE MIRROR MAPS ---
+    const TASK1_OPPOSITE_MAP = {
+      style: {
+        'oil painting style': ['photorealistic', '3D render', 'anime'],
+        'watercolour': ['photorealistic', '3D render', 'heavy oil paint', 'neon digital art'],
+        'charcoal sketch': ['photorealistic', 'full color photo', '3D render', 'glossy digital art'],
+        'cinematic photo': ['oil painting', 'cartoon', 'anime', '3D render'],
+        'documentary photo': ['oil painting', 'CGI', 'anime', 'staged studio look'],
+        '3D render': ['oil painting', 'hand-drawn sketch', '2D flat illustration', 'film grain photo'],
+        'flat vector': ['photorealistic', '3D render', 'oil painting', 'heavy texture'],
+        'anime': ['photorealistic', '3D CGI render', 'oil painting', 'live-action photo'],
+        'film noir': ['bright pastel colors', 'cartoon', 'anime', 'cheerful daylight']
+      },
+      palette: {
+        'muted palette': [],
+        'warm earth tones': ['icy cold blue tones', 'neon colors', 'sterile monochrome'],
+        'cool blue-grey': ['warm orange tint', 'vibrant tropical colors', 'golden sepia'],
+        'monochrome': ['multicolored', 'vibrant colors', 'pastel rainbow tones'],
+        'pastel': ['dark gothic shadows', 'harsh neon colors', 'heavy black contrast'],
+        'jewel tones': ['washed-out pastels', 'faded beige', 'dull desaturated grey'],
+        'sun-bleached': ['dark moody shadows', 'heavy contrast', 'deep neon saturation']
+      },
+      lighting: {
+        'Rembrandt lighting': [],
+        'golden hour backlight': ['cold fluorescent light', 'harsh overhead midday glare'],
+        'soft window light': ['harsh direct sunlight', 'neon club lighting', 'hard flash shadows'],
+        'harsh midday sun': ['dim twilight', 'soft moody shadows', 'dark overcast sky'],
+        'neon night': ['bright natural daylight', 'warm afternoon sun', 'pastel morning light'],
+        'candlelight': ['cold daylight', 'harsh studio flash', 'fluorescent office light'],
+        'overcast diffused': ['harsh direct sunlight', 'strong lens flare', 'hard cast shadows']
+      },
+      lens: {
+        '24mm wide': ['tight telephoto crop', 'compressed background'],
+        '35mm lens': [],
+        '50mm': ['extreme wide-angle distortion', 'macro closeup'],
+        '85mm portrait': ['wide-angle distortion', 'distant full-landscape shot'],
+        '135mm compressed': ['wide-angle distortion', 'expansive wide view']
+      },
+      accent: {
+        'shallow depth of field, warm rim light': [],
+        'cool rim light': ['warm orange rim light', 'harsh yellow tint'],
+        'lens flare': ['flat sterile lighting', 'dull shadowless light'],
+        'volumetric fog': ['crystal-clear dry air', 'zero haze'],
+        'soft haze': ['over-sharpened clinical clarity', 'harsh dry contrast']
+      }
+    };
+
+    const STARTER_TASK1_PRESET = {
+      subject: 'A weathered older traveler in a heavy wool coat and knit cap, gazing out toward the horizon',
+      setting: 'standing on a fog-covered coastal cliff at dawn',
+      style: 'oil painting style',
+      palette: 'muted palette',
+      lighting: 'Rembrandt lighting',
+      lens: '35mm lens',
+      accent: 'shallow depth of field, warm rim light'
+    };
+
+    // --- APPLICATION STATE ---
+    const state = {
+      task1: { ...STARTER_TASK1_PRESET },
+      task1Options: {
+        styles: ['oil painting style', 'watercolour', 'charcoal sketch', 'cinematic photo', 'documentary photo', '3D render', 'flat vector', 'anime', 'film noir'],
+        palettes: ['muted palette', 'warm earth tones', 'cool blue-grey', 'monochrome', 'pastel', 'jewel tones', 'sun-bleached'],
+        lightings: ['Rembrandt lighting', 'golden hour backlight', 'soft window light', 'harsh midday sun', 'neon night', 'candlelight', 'overcast diffused'],
+        lenses: ['24mm wide', '35mm lens', '50mm', '85mm portrait', '135mm compressed'],
+        accents: ['shallow depth of field, warm rim light', 'cool rim light', 'lens flare', 'volumetric fog', 'soft haze']
+      },
+      task2: {
+        mandatoryDisabled: [],
+        autoMirrorDisabled: [],
+        manualExtras: []
+      },
+      task3: {
+        hookStyle: 'Contradiction — name the paradox',
+        tone: 'Calm, reflective, cinematic, and authoritative',
+        storyDirection: '',
+        isCustomPrompt: false,
+        hookOptions: [
+          'Contradiction — name the paradox',
+          'Direct callout — speak to one person',
+          'Bold claim — state the conclusion first',
+          'Mistake reveal — right thing, wrong time',
+          'Curiosity gap — promise the untold thing',
+          'Cost framing — attach a number to it'
+        ],
+        toneOptions: [
+          'Calm, reflective, cinematic, and authoritative',
+          'friendly and conversational',
+          'calm and authoritative',
+          'punchy and high-energy',
+          'warm and reassuring',
+          'blunt and direct',
+          'lightly humorous'
+        ]
+      },
+      task7: {
+        activeVoice: 'Calm, clear voice',
+        activeSpeed: '0.7x'
+      }
+    };
+
+    // --- SMART OPPOSITE EXTRACTION FOR TASK 1 -> TASK 2 ---
+    function computeTask1Opposites(t1) {
+      const subjectText = (t1.subject || '').toLowerCase();
+      const settingText = (t1.setting || '').toLowerCase();
+
+      const subjectOpposites = [];
+      const addUnique = (arr, term) => {
+        if (!arr.includes(term) && !MANDATORY_NEGATIVES.includes(term)) {
+          arr.push(term);
+        }
+      };
+
+      const isFemale = /\b(woman|female|girl|lady|mother|grandmother|she|her)\b/.test(subjectText);
+
+      // Subject age & grooming
+      if (/\b(weathered|older|elderly|aged|senior|old|wrinkled)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, isFemale ? 'young woman' : 'young man');
+        addUnique(subjectOpposites, isFemale ? 'flawless youthful skin' : 'clean-shaven');
+      } else if (/\b(young|youthful|teen|boy|girl|child|kid)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'elderly');
+        addUnique(subjectOpposites, 'wrinkled aged face');
+      }
+
+      if (/\b(bearded|beard|stubble|mustache)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'clean-shaven');
+      } else if (/\b(clean-shaven|smooth-faced)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'heavy beard');
+      }
+
+      if (isFemale) {
+        addUnique(subjectOpposites, 'bearded man');
+      }
+
+      // Subject wardrobe
+      if (/\b(wool coat|knit cap|vintage|period|traditional|historic|ancient|medieval|cloak|robe)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'modern clothing');
+      } else if (/\b(modern|suit|blazer|streetwear|hoodie|t-shirt|jeans|casual|futuristic|sneakers)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'historical costume');
+        addUnique(subjectOpposites, 'period clothing');
+      }
+
+      // Subject expression & action
+      if (/\b(smiling|laughing|happy|joyful|grinning|cheerful)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'frowning');
+        addUnique(subjectOpposites, 'angry expression');
+      } else if (/\b(solemn|serious|stoic|brooding|melancholy|somber|sad|frowning)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'smiling');
+        addUnique(subjectOpposites, 'laughing');
+      }
+
+      if (/\b(running|sprinting|hurrying|jumping|dancing|leaping)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'standing still');
+        addUnique(subjectOpposites, 'static pose');
+      } else if (/\b(sitting|seated|resting|sleeping|lounging)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'running');
+        addUnique(subjectOpposites, 'jumping');
+      }
+
+      if (/\b(alone|lone|solo|solitary)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'crowd');
+        addUnique(subjectOpposites, 'extra people');
+      } else if (/\b(crowd|group|team|family|people)\b/.test(subjectText)) {
+        addUnique(subjectOpposites, 'empty scene');
+        addUnique(subjectOpposites, 'solitary figure');
+      }
+
+      // Setting, time & mood
+      const settingOpposites = [];
+      if (/\b(fog|foggy|fog-covered|mist|misty|hazy|overcast|cloudy)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'clear sky');
+      } else if (/\b(clear sky|sunny|cloudless|sunlit|blue sky)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'heavy fog');
+        addUnique(settingOpposites, 'overcast clouds');
+      }
+
+      if (/\b(dawn|sunrise|dusk|twilight|sunset|night|midnight|evening)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'bright midday');
+      } else if (/\b(midday|noon|afternoon)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'pitch black night');
+        addUnique(settingOpposites, 'dark twilight');
+      }
+
+      if (/\b(rain|rainy|storm|stormy|wet|downpour)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'dry sunny weather');
+      }
+      if (/\b(snow|snowy|winter|icy|frozen|blizzard)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'tropical summer');
+        addUnique(settingOpposites, 'warm desert');
+      } else if (/\b(desert|arid|tropical|summer)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'snowy winter');
+        addUnique(settingOpposites, 'heavy rain');
+      }
+
+      if (/\b(city|cityscape|urban|downtown|street|skyscraper|office|indoor|interior|room|cafe|kitchen|studio)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'wilderness');
+        addUnique(settingOpposites, 'open sea');
+      } else if (/\b(forest|woods|jungle|mountain|beach|countryside|rural|village)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'cityscape');
+        addUnique(settingOpposites, 'urban skyline');
+      }
+
+      if (/\b(calm|peaceful|serene|quiet|still|minimal)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'chaotic crowd');
+      } else if (/\b(chaotic|busy|crowded|bustling)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'empty deserted scene');
+      }
+
+      if (/\b(dark|moody|gloomy|eerie|ominous)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'bright cheerful daylight');
+      } else if (/\b(bright|cheerful|vibrant|lively)\b/.test(settingText)) {
+        addUnique(settingOpposites, 'dark gloomy shadows');
+      }
+
+      // Visual style, palette, lighting, lens, accent opposites
+      const visualOpposites = [];
+      ['style', 'palette', 'lighting', 'lens', 'accent'].forEach(key => {
+        const mapped = TASK1_OPPOSITE_MAP[key][t1[key]] || [];
+        mapped.forEach(term => addUnique(visualOpposites, term));
+      });
+
+      const allAutoOpposites = [];
+      [...subjectOpposites, ...settingOpposites, ...visualOpposites].forEach(term => {
+        addUnique(allAutoOpposites, term);
+      });
+
+      return {
+        subjectOpposites,
+        settingOpposites,
+        visualOpposites,
+        allAutoOpposites
+      };
+    }
+
+    // --- CLIPBOARD & TOAST ---
+    function copyTextToClipboard(text, label = 'Copied to clipboard!') {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(label);
+        }).catch(() => {
+          fallbackCopyText(text, label);
+        });
+      } else {
+        fallbackCopyText(text, label);
+      }
+    }
+
+    function fallbackCopyText(text, label) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(label);
+      } catch (err) {
+        showToast('Please copy manually.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    let toastTimer = null;
+    function showToast(message) {
+      const toast = document.getElementById('toast-notification');
+      const msgEl = document.getElementById('toast-message');
+      msgEl.textContent = message;
+      toast.classList.remove('opacity-0', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2600);
+    }
+
+    // --- TAB SWITCHER ---
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      const targetPanel = document.getElementById(`tab-${tabId}`);
+      if (targetPanel) targetPanel.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        const isSelected = btn.getAttribute('data-tab') === tabId;
+        btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        if (isSelected) {
+          btn.className = 'nav-tab m3-pill px-4 py-2 text-xs sm:text-sm font-bold flex items-center gap-2 bg-indigo-600 text-white shadow-sm';
+        } else {
+          btn.className = 'nav-tab m3-pill px-4 py-2 text-xs sm:text-sm font-bold flex items-center gap-2 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-700/20';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    window.switchTab = switchTab;
+
+    // --- ANATOMY OF A PROMPT LIVE BUILDER ---
+    function updateAnatomyBuilder() {
+      const persona = document.getElementById('anat-persona').value.trim();
+      const task = document.getElementById('anat-task').value.trim();
+      const limits = document.getElementById('anat-limits').value.trim();
+      const format = document.getElementById('anat-format').value.trim();
+
+      const count = [persona, task, limits, format].filter(Boolean).length;
+      const badge = document.getElementById('anat-score-badge');
+      badge.textContent = `${count}/4 Pillars Complete`;
+
+      const compiled = [
+        persona ? `[PERSONA]\n${persona}` : '',
+        task ? `[TASK]\n${task}` : '',
+        limits ? `[CONTEXT & LIMITS]\n${limits}` : '',
+        format ? `[FORMAT & SHAPE]\n${format}` : ''
+      ].filter(Boolean).join('\n\n');
+
+      document.getElementById('anat-output').textContent = compiled || 'Fill in the 4 pillars on the left to assemble your structured brief.';
+    }
+
+    // --- TASK 1 & TASK 2 LINKED RENDERING ---
+    function renderTask1Pills() {
+      const groups = [
+        { containerId: 't1-style-pills', key: 'style', options: state.task1Options.styles },
+        { containerId: 't1-palette-pills', key: 'palette', options: state.task1Options.palettes },
+        { containerId: 't1-lighting-pills', key: 'lighting', options: state.task1Options.lightings },
+        { containerId: 't1-lens-pills', key: 'lens', options: state.task1Options.lenses },
+        { containerId: 't1-accent-pills', key: 'accent', options: state.task1Options.accents }
+      ];
+
+      groups.forEach(({ containerId, key, options }) => {
+        const el = document.getElementById(containerId);
+        el.innerHTML = '';
+        options.forEach(opt => {
+          const isSelected = state.task1[key] === opt;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = isSelected
+            ? 'm3-pill px-3 py-1 text-xs font-bold bg-indigo-600 text-white shadow-sm'
+            : 'm3-pill px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-700/20';
+          btn.textContent = opt;
+          btn.addEventListener('click', () => {
+            state.task1[key] = opt;
+            renderTask1Pills();
+            updateTask1And2Outputs();
+          });
+          el.appendChild(btn);
+        });
+      });
+    }
+
+    function getTask1StylePhrase() {
+      const { style, palette, lighting, lens, accent } = state.task1;
+      return [style, palette, lighting, lens, accent].filter(Boolean).join(', ');
+    }
+
+    function getTask1CompiledPrompt() {
+      const subject = state.task1.subject || '[describe your character & action]';
+      const setting = state.task1.setting || '[describe your setting, time & mood]';
+      const stylePhrase = getTask1StylePhrase();
+      return `${subject}, ${setting}, ${stylePhrase}.`;
+    }
+
+    function getActiveTask2NegativeList() {
+      const { allAutoOpposites } = computeTask1Opposites(state.task1);
+      const result = [];
+      const pushUnique = (term) => {
+        if (term && !result.includes(term)) result.push(term);
+      };
+
+      MANDATORY_NEGATIVES.forEach(term => {
+        if (!state.task2.mandatoryDisabled.includes(term)) pushUnique(term);
+      });
+
+      allAutoOpposites.forEach(term => {
+        if (!state.task2.autoMirrorDisabled.includes(term)) pushUnique(term);
+      });
+
+      state.task2.manualExtras.forEach(term => {
+        pushUnique(term);
+      });
+
+      return result;
+    }
+
+    function getDynamicSceneNegativePrompt() {
+      const combined = [...getActiveTask2NegativeList()];
+      CONTINUITY_NEGATIVE_GUARDS.forEach(term => {
+        if (!combined.includes(term)) combined.push(term);
+      });
+      return combined.join(', ');
+    }
+
+    function getDynamicJsonNegativePrompt() {
+      const combined = [...getActiveTask2NegativeList()];
+      [...CONTINUITY_NEGATIVE_GUARDS, ...MOTION_SILENCE_NEGATIVE_GUARDS].forEach(term => {
+        if (!combined.includes(term)) combined.push(term);
+      });
+      return combined.join(', ');
+    }
+
+    function renderTask2MirrorPanelAndPills() {
+      const { subjectOpposites, settingOpposites, visualOpposites, allAutoOpposites } = computeTask1Opposites(state.task1);
+
+      // Clean up stale disabled auto-mirror terms that are no longer active
+      state.task2.autoMirrorDisabled = state.task2.autoMirrorDisabled.filter(t => allAutoOpposites.includes(t));
+
+      // Render Live Mirror Summary Strip
+      const summaryEl = document.getElementById('t2-live-mirror-summary');
+      const escapeHtml = (str) => str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+      const subjOppLabel = subjectOpposites.length ? subjectOpposites.join(', ') : 'No automatic subject opposites detected (use optional chips below)';
+      const setOppLabel = settingOpposites.length ? settingOpposites.join(', ') : 'No automatic setting opposites detected (use optional chips below)';
+      const visualActiveSummary = `${state.task1.style} · ${state.task1.palette} · ${state.task1.lighting} · ${state.task1.lens}`;
+      const visualOppNotes = [...visualOpposites];
+      if (state.task1.palette === 'muted palette') visualOppNotes.push('oversaturated colours (mandatory)');
+      if (state.task1.lens === '35mm lens') visualOppNotes.push('fisheye (mandatory)');
+      const visOppLabel = visualOppNotes.length ? visualOppNotes.join(', ') : 'Covered by mandatory faults';
+
+      summaryEl.innerHTML = `
+        <div class="p-3 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-indigo-500/20 space-y-1">
+          <div class="font-extrabold text-[11px] uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Subject & Action (Task 1)</div>
+          <div class="text-slate-700 dark:text-slate-300 line-clamp-2 font-medium">${escapeHtml(state.task1.subject || 'Freestyle — type your own character in Task 1')}</div>
+          <div class="text-[11px] text-rose-600 dark:text-rose-400 font-semibold pt-0.5">→ Auto-Excludes: ${escapeHtml(subjOppLabel)}</div>
+        </div>
+        <div class="p-3 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-indigo-500/20 space-y-1">
+          <div class="font-extrabold text-[11px] uppercase tracking-wider text-teal-600 dark:text-teal-400">Setting, Time & Mood (Task 1)</div>
+          <div class="text-slate-700 dark:text-slate-300 line-clamp-2 font-medium">${escapeHtml(state.task1.setting || 'Freestyle — type your own setting in Task 1')}</div>
+          <div class="text-[11px] text-rose-600 dark:text-rose-400 font-semibold pt-0.5">→ Auto-Excludes: ${escapeHtml(setOppLabel)}</div>
+        </div>
+        <div class="p-3 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-indigo-500/20 space-y-1">
+          <div class="font-extrabold text-[11px] uppercase tracking-wider text-amber-600 dark:text-amber-400">Style, Palette, Lighting & Lens</div>
+          <div class="text-slate-700 dark:text-slate-300 line-clamp-2 font-medium">${escapeHtml(visualActiveSummary)}</div>
+          <div class="text-[11px] text-rose-600 dark:text-rose-400 font-semibold pt-0.5">→ Auto-Excludes: ${escapeHtml(visOppLabel)}</div>
+        </div>
+      `;
+
+      // 1. Mandatory pills
+      const mandContainer = document.getElementById('t2-mandatory-pills');
+      mandContainer.innerHTML = '';
+      MANDATORY_NEGATIVES.forEach(term => {
+        const active = !state.task2.mandatoryDisabled.includes(term);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = active
+          ? 'm3-pill px-3 py-1 text-xs font-bold bg-rose-600 text-white shadow-sm'
+          : 'm3-pill px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-700/20';
+        btn.textContent = active ? `✕ ${term}` : `+ ${term}`;
+        btn.addEventListener('click', () => {
+          if (active) {
+            state.task2.mandatoryDisabled.push(term);
+          } else {
+            state.task2.mandatoryDisabled = state.task2.mandatoryDisabled.filter(t => t !== term);
+          }
+          updateTask1And2Outputs();
+        });
+        mandContainer.appendChild(btn);
+      });
+
+      // 2. Auto-mirrored opposite pills
+      const autoContainer = document.getElementById('t2-auto-mirror-pills');
+      autoContainer.innerHTML = '';
+      if (allAutoOpposites.length === 0) {
+        autoContainer.innerHTML = '<span class="text-xs text-slate-500 italic">Type details or select layers in Task 1 to generate opposite exclusions automatically.</span>';
+      } else {
+        allAutoOpposites.forEach(term => {
+          const active = !state.task2.autoMirrorDisabled.includes(term);
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = active
+            ? 'm3-pill px-3 py-1 text-xs font-bold bg-indigo-600 text-white shadow-sm'
+            : 'm3-pill px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-700/20';
+          btn.textContent = active ? `⇄ ✕ ${term}` : `+ ${term}`;
+          btn.title = 'Automatically mirrored from Task 1 (click to toggle)';
+          btn.addEventListener('click', () => {
+            if (active) {
+              state.task2.autoMirrorDisabled.push(term);
+            } else {
+              state.task2.autoMirrorDisabled = state.task2.autoMirrorDisabled.filter(t => t !== term);
+            }
+            updateTask1And2Outputs();
+          });
+          autoContainer.appendChild(btn);
+        });
+      }
+
+      // 3. Additional optional pills
+      const extraContainer = document.getElementById('t2-extra-pills');
+      extraContainer.innerHTML = '';
+      const extraPool = [];
+      [...OPTIONAL_EXTRA_NEGATIVES, ...state.task2.manualExtras].forEach(term => {
+        if (!MANDATORY_NEGATIVES.includes(term) && !allAutoOpposites.includes(term) && !extraPool.includes(term)) {
+          extraPool.push(term);
+        }
+      });
+
+      extraPool.forEach(term => {
+        const active = state.task2.manualExtras.includes(term);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = active
+          ? 'm3-pill px-3 py-1 text-xs font-bold bg-rose-600 text-white shadow-sm'
+          : 'm3-pill px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-700/20';
+        btn.textContent = active ? `✕ ${term}` : `+ ${term}`;
+        btn.addEventListener('click', () => {
+          if (active) {
+            state.task2.manualExtras = state.task2.manualExtras.filter(t => t !== term);
+          } else {
+            state.task2.manualExtras.push(term);
+          }
+          updateTask1And2Outputs();
+        });
+        extraContainer.appendChild(btn);
+      });
+    }
+
+    function updateTask1And2Outputs() {
+      state.task1.subject = document.getElementById('t1-subject').value.trim();
+      state.task1.setting = document.getElementById('t1-setting').value.trim();
+
+      const positivePrompt = getTask1CompiledPrompt();
+      document.getElementById('t1-compiled-output').textContent = `"${positivePrompt}"`;
+
+      renderTask2MirrorPanelAndPills();
+
+      const negList = getActiveTask2NegativeList().join(', ');
+      const combinedT2 = `Generate the same image again as "Version B", using my positive prompt from Task 1 with the negative prompt below. Keep "Version A" (the earlier image) in the thread so I can compare.\n\n${positivePrompt}\n\nNegative Prompts: ${negList}`;
+      document.getElementById('t2-compiled-output').textContent = combinedT2;
+
+      // Live-sync Task 3 and Task 4 master prompts with Task 1 & 2 selections
+      renderTask3MasterPrompt();
+      renderTask4MasterPrompt();
+    }
+
+    // --- TASK 3: GENERIC FREESTYLE 50-SECOND VIDEO SCRIPT MASTER PROMPT ---
+    function getTask3MasterScriptPrompt() {
+      const toneLine = state.task3.tone;
+      const hookLine = state.task3.isCustomPrompt
+        ? `Begin with a strong hook using this style: ${state.task3.hookStyle}.`
+        : 'Begin with a strong hook (a contradiction, provocative question, or bold statement) that challenges a common assumption.';
+      const stylePhrase = getTask1StylePhrase();
+      const dynamicSceneNegatives = getDynamicSceneNegativePrompt();
+      const storyDirection = (state.task3.storyDirection || '').trim();
+      const storyOutcomeLine = storyDirection
+        ? `- Story direction & outcome: ${storyDirection}`
+        : '- Story message & outcome: Deliver one clear lesson, twist, or emotional payoff that grows naturally out of the character\'s story (or adapt the outcome to any direction I specify).';
+
+      return `Act as an expert short form cinematic video scriptwriter, voiceover writer, and AI image prompt engineer specializing in visual storytelling and cinematic continuity.
+
+Your task is to generate a complete, ready to use 50 second vertical cinematic video script based entirely on the character, subject, setting, and visual style we have built earlier in this thread (the image we created, the exclusions we added, and the mood we established).
+
+Create the entire script yourself using the context from our previous messages. Do not ask me to provide the narration, captions, or scene descriptions. Do not ask me to paste earlier prompts, because they are already in this thread.
+
+1. Video Requirements
+- Duration: Exactly 50 seconds (10 seconds per scene across 5 scenes).
+- Format: Vertical 9:16.
+- Tone: ${toneLine}.
+- Visual style: Stay faithful to the visual aesthetic established in this thread (${stylePhrase}).
+${storyOutcomeLine}
+- Opening hook: ${hookLine}
+
+2. Character and Continuity
+- Define the main character in Scene 1 using the exact physical traits, age, clothing, and key props already established in this thread.
+- Keep the same identity, facial features, wardrobe, props, setting, weather and environment in all five scenes.
+- Use a cohesive lighting progression and a unified color palette matching ${state.task1.palette}.
+
+3. Required Scene Structure (fixed timings)
+1. SCENE 1 HOOK: 0 to 10 seconds. Establish the setting, introduce the main character, and deliver the opening hook.
+2. SCENE 2 CONTEXT: 10 to 20 seconds. Develop the character's routine, goal, or central conflict.
+3. SCENE 3 RE HOOK: 20 to 30 seconds. Introduce a turning point, obstacle, twist, or shift in perspective.
+4. SCENE 4 VALUE: 30 to 40 seconds. Reveal the deeper meaning, realization, or core insight.
+5. SCENE 5 REWARD: 40 to 50 seconds. Resolve the story arc with a memorable closing image and final takeaway (or twist ending, if specified above).
+
+4. Required Content for Every Scene
+A. Voiceover: the exact narration, 12 to 20 spoken words (5 to 8 seconds). The remaining seconds are silence or ambient sound. Natural, emotionally engaging, and building on the previous scene.
+B. Text on Screen: one short caption in ALL CAPITAL LETTERS, no more than eight words.
+C. Text to Image Prompt: a detailed, independent, copy and paste ready prompt describing the character, action, setting, composition, camera framing, lighting, atmosphere and colors. Every prompt must include this exact style phrase: "${stylePhrase}." Every prompt must end with this exact phrase, with no text after it: consistent character and clothing, vertical 9:16
+D. Negative Prompt: include this exact block immediately after the Text to Image Prompt in every scene:
+Negative prompt: ${dynamicSceneNegatives}
+
+5. Visual Storytelling Rules
+- Vary camera framing naturally: Scene 1 medium shot, Scene 2 focused detail, Scene 3 movement or traversal, Scene 4 intimate close up, Scene 5 wide atmospheric shot.
+- Progress the lighting naturally from Scene 1 to Scene 5 to mirror the emotional resolution and story outcome.
+- Do not add narration outside the five scenes.`;
+    }
+
+    function renderTask3MasterPrompt() {
+      const el = document.getElementById('t3-master-prompt');
+      if (el) el.textContent = getTask3MasterScriptPrompt();
+    }
+
+    function renderTask3Options() {
+      const hookContainer = document.getElementById('t3-hook-pills');
+      hookContainer.innerHTML = '';
+      state.task3.hookOptions.forEach(h => {
+        const active = state.task3.hookStyle === h;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = active
+          ? 'm3-pill px-3 py-1 text-xs font-bold bg-indigo-600 text-white'
+          : 'm3-pill px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-700/20';
+        btn.textContent = h;
+        btn.addEventListener('click', () => {
+          state.task3.hookStyle = h;
+          state.task3.isCustomPrompt = true;
+          renderTask3Options();
+        });
+        hookContainer.appendChild(btn);
+      });
+
+      const toneContainer = document.getElementById('t3-tone-pills');
+      toneContainer.innerHTML = '';
+      state.task3.toneOptions.forEach(t => {
+        const active = state.task3.tone === t;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = active
+          ? 'm3-pill px-3 py-1 text-xs font-bold bg-teal-600 text-white'
+          : 'm3-pill px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-700/20';
+        btn.textContent = t;
+        btn.addEventListener('click', () => {
+          state.task3.tone = t;
+          renderTask3Options();
+        });
+        toneContainer.appendChild(btn);
+      });
+
+      renderTask3MasterPrompt();
+    }
+
+    // --- TASK 4: GENERIC MASTER JSON CONVERSION PROMPT ---
+    function getTask4MasterJsonPrompt() {
+      const dynamicJsonNegatives = getDynamicJsonNegativePrompt();
+      return `Convert the 5 scenes above into a numbered list of standalone JSON blocks (1. to 5.), with each scene formatted inside a single set of curly brackets. Do not wrap them in an array. Each block animates the still image of the same scene number. Generate each scene for a 10-second continuous motion clip in a vertical 9:16 aspect ratio, with no voiceover or spoken audio.
+
+Include these exact fields in every scene's JSON object:
+- "duration": "10 seconds"
+- "aspect_ratio": "9:16"
+- "subject": Keep the main character's description word-for-word identical across every scene.
+- "action": Describe continuous, slow physical and environmental motion paced to fill a 10-second shot.
+- "camera movement": Describe a single, smooth cinematic camera movement paced over 10 seconds.
+- "negative_prompt": "${dynamicJsonNegatives}"
+
+Return only the numbered JSON blocks, with no commentary.`;
+    }
+
+    function renderTask4MasterPrompt() {
+      const masterEl = document.getElementById('t4-master-json-prompt');
+      if (masterEl) masterEl.textContent = getTask4MasterJsonPrompt();
+    }
+
+    // --- TASK 7: ELEVENLABS + VIDEO EDITOR INTERACTIVE CONFIGURATOR ---
+    function renderTask7Interactive() {
+      const voices = [
+        { name: 'Calm, clear voice', desc: 'Great default for explainers and reflective stories.', default: true },
+        { name: 'Deep, steady voice', desc: 'Authority, cinematic narration, and dramatic stories.', default: false },
+        { name: 'Warm, friendly voice', desc: 'Storytelling, human interest, and lifestyle content.', default: false },
+        { name: 'Bright, upbeat voice', desc: 'Fast tips, twists, and high-energy stories.', default: false }
+      ];
+
+      const voiceContainer = document.getElementById('t7-voice-container');
+      voiceContainer.innerHTML = '';
+      voices.forEach(v => {
+        const isSelected = state.task7.activeVoice === v.name;
+        const div = document.createElement('button');
+        div.type = 'button';
+        div.className = `w-full text-left p-3 rounded-2xl transition-all border ${
+          isSelected
+            ? 'bg-indigo-500/15 border-indigo-500 dark:border-indigo-400 text-indigo-900 dark:text-indigo-200 shadow-sm'
+            : 'bg-slate-100 dark:bg-slate-800/80 border-slate-700/20 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80'
+        }`;
+        div.innerHTML = `
+          <div class="flex items-center justify-between font-bold">
+            <span>${v.name} ${v.default ? '<span class="text-[11px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-indigo-600 text-white ml-1.5">Recommended</span>' : ''}</span>
+            <i data-lucide="${isSelected ? 'check-circle' : 'circle'}" class="w-4 h-4 ${isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'}"></i>
+          </div>
+          <div class="text-xs text-slate-600 dark:text-slate-400 mt-1">${v.desc}</div>
+        `;
+        div.addEventListener('click', () => {
+          state.task7.activeVoice = v.name;
+          renderTask7Interactive();
+          showToast(`Selected voice style: ${v.name}`);
+        });
+        voiceContainer.appendChild(div);
+      });
+
+      const speeds = [
+        { rate: '0.7x', desc: 'Calm cinematic pacing, recommended starting point.', default: true },
+        { rate: '0.85x', desc: 'Conversational pacing, suits dialogue-style scripts.', default: false },
+        { rate: '1.0x', desc: 'Use when your script already runs tight against the 50-second duration.', default: false }
+      ];
+
+      const speedContainer = document.getElementById('t7-speed-container');
+      speedContainer.innerHTML = '';
+      speeds.forEach(s => {
+        const isSelected = state.task7.activeSpeed === s.rate;
+        const div = document.createElement('button');
+        div.type = 'button';
+        div.className = `w-full text-left p-3 rounded-2xl transition-all border ${
+          isSelected
+            ? 'bg-teal-500/15 border-teal-500 dark:border-teal-400 text-teal-900 dark:text-teal-200 shadow-sm'
+            : 'bg-slate-100 dark:bg-slate-800/80 border-slate-700/20 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/80'
+        }`;
+        div.innerHTML = `
+          <div class="flex items-center justify-between font-bold">
+            <span>${s.rate} ${s.default ? '<span class="text-[11px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-teal-600 text-white ml-1.5">Recommended</span>' : ''}</span>
+            <i data-lucide="${isSelected ? 'check-circle' : 'circle'}" class="w-4 h-4 ${isSelected ? 'text-teal-600 dark:text-teal-400' : 'text-slate-400'}"></i>
+          </div>
+          <div class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">${s.desc}</div>
+        `;
+        div.addEventListener('click', () => {
+          state.task7.activeSpeed = s.rate;
+          renderTask7Interactive();
+          showToast(`Selected voice speed: ${s.rate}`);
+        });
+        speedContainer.appendChild(div);
+      });
+
+      if (window.lucide) {
+        lucide.createIcons({
+          root: document.getElementById('section-task-7')
+        });
+      }
+    }
+
+    // --- PROGRESS TRACKER ---
+    function updateProgressCount() {
+      const checks = document.querySelectorAll('.task-checkbox');
+      let completed = 0;
+      checks.forEach(ch => {
+        if (ch.checked) completed++;
+      });
+      document.getElementById('header-progress-count').textContent = `${completed}/${checks.length}`;
+    }
+
+    // --- INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      // Navigation Tabs
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchTab(btn.getAttribute('data-tab'));
+        });
+      });
+
+      // Dark / Light Theme Toggle
+      document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        if (window.lucide) lucide.createIcons();
+      });
+
+      // Anatomy of a prompt builder listeners
+      ['anat-persona', 'anat-task', 'anat-limits', 'anat-format'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateAnatomyBuilder);
+      });
+
+      document.getElementById('btn-anatomy-sample').addEventListener('click', () => {
+        document.getElementById('anat-persona').value = 'Act as a social media manager for a specialty coffee brand.';
+        document.getElementById('anat-task').value = 'Write a 30-second launch script for our bottled cold brew.';
+        document.getElementById('anat-limits').value = 'Audience: busy young professionals. Tone: warm, energetic. Hard limit: 5 short scenes, under 95 words total.';
+        document.getElementById('anat-format').value = 'Format as a 3-column table (Timecode, Spoken Line, Visual Prompt).';
+        updateAnatomyBuilder();
+        showToast('Sample prompt brief loaded!');
+      });
+
+      document.getElementById('btn-anatomy-copy').addEventListener('click', () => {
+        copyTextToClipboard(document.getElementById('anat-output').textContent, 'Structured prompt brief copied!');
+      });
+
+      // Task 1 & 2 linked setup
+      renderTask1Pills();
+      updateTask1And2Outputs();
+
+      document.getElementById('t1-subject').addEventListener('input', updateTask1And2Outputs);
+      document.getElementById('t1-setting').addEventListener('input', updateTask1And2Outputs);
+
+      document.getElementById('btn-clear-task1-freestyle').addEventListener('click', () => {
+        const subjEl = document.getElementById('t1-subject');
+        const setEl = document.getElementById('t1-setting');
+        subjEl.value = '';
+        setEl.value = '';
+        state.task2.autoMirrorDisabled = [];
+        updateTask1And2Outputs();
+        subjEl.focus();
+        showToast('Cleared to freestyle — type any character & setting!');
+      });
+
+      document.getElementById('btn-load-task1-class').addEventListener('click', () => {
+        state.task1 = { ...STARTER_TASK1_PRESET };
+        document.getElementById('t1-subject').value = state.task1.subject;
+        document.getElementById('t1-setting').value = state.task1.setting;
+        state.task2.autoMirrorDisabled = [];
+        renderTask1Pills();
+        updateTask1And2Outputs();
+        showToast('Starter example loaded & synced across Tasks 1–4!');
+      });
+
+      document.getElementById('btn-copy-t1').addEventListener('click', () => {
+        copyTextToClipboard(getTask1CompiledPrompt(), 'Task 1 positive prompt copied!');
+      });
+
+      document.getElementById('btn-resync-t2-opposites').addEventListener('click', () => {
+        state.task2.autoMirrorDisabled = [];
+        state.task2.mandatoryDisabled = [];
+        updateTask1And2Outputs();
+        showToast('Re-synced opposite exclusions from Task 1!');
+      });
+
+      // Extra mirror preset buttons in Task 2
+      document.querySelectorAll('.mirror-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const terms = btn.getAttribute('data-mirror').split(',').map(s => s.trim());
+          const { allAutoOpposites } = computeTask1Opposites(state.task1);
+          terms.forEach(t => {
+            if (allAutoOpposites.includes(t)) {
+              state.task2.autoMirrorDisabled = state.task2.autoMirrorDisabled.filter(x => x !== t);
+            } else if (!MANDATORY_NEGATIVES.includes(t) && !state.task2.manualExtras.includes(t)) {
+              state.task2.manualExtras.push(t);
+            }
+          });
+          updateTask1And2Outputs();
+          showToast('Mirror exclusions added!');
+        });
+      });
+
+      document.getElementById('btn-reset-t2-class').addEventListener('click', () => {
+        state.task2.mandatoryDisabled = [];
+        state.task2.autoMirrorDisabled = [];
+        state.task2.manualExtras = [];
+        updateTask1And2Outputs();
+        showToast('Task 2 reset to mandatory + live Task 1 mirrors!');
+      });
+
+      document.getElementById('btn-copy-t2').addEventListener('click', () => {
+        copyTextToClipboard(document.getElementById('t2-compiled-output').textContent, 'Task 2 Version B prompt copied!');
+      });
+
+      // Task 3 (Generic Freestyle 50-Second Script Master Prompt) setup
+      renderTask3Options();
+
+      document.getElementById('t3-story-direction').addEventListener('input', (e) => {
+        state.task3.storyDirection = e.target.value;
+        renderTask3MasterPrompt();
+      });
+
+      document.getElementById('btn-reset-t3-class-prompt').addEventListener('click', () => {
+        state.task3.hookStyle = 'Contradiction — name the paradox';
+        state.task3.tone = 'Calm, reflective, cinematic, and authoritative';
+        state.task3.storyDirection = '';
+        state.task3.isCustomPrompt = false;
+        document.getElementById('t3-story-direction').value = '';
+        renderTask3Options();
+        showToast('Restored default Task 3 script settings!');
+      });
+
+      document.getElementById('btn-copy-t3-master-prompt').addEventListener('click', () => {
+        copyTextToClipboard(document.getElementById('t3-master-prompt').textContent, 'Task 3 Master Script Prompt copied!');
+      });
+
+      // 5-Scene Structure Blueprint Modal controls
+      const modal = document.getElementById('script-modal');
+      document.getElementById('btn-open-script-modal').addEventListener('click', () => {
+        modal.classList.remove('hidden');
+      });
+      document.getElementById('btn-close-modal').addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+      document.getElementById('btn-modal-done').addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+        }
+      });
+
+      // Task 4 (Generic Master JSON Conversion Prompt) setup
+      renderTask4MasterPrompt();
+
+      document.getElementById('btn-copy-t4-master-prompt').addEventListener('click', () => {
+        copyTextToClipboard(getTask4MasterJsonPrompt(), 'Task 4 Master JSON Prompt copied!');
+      });
+
+      // Task 7 setup
+      renderTask7Interactive();
+
+      // Checkboxes & Progress tracking
+      document.querySelectorAll('.task-checkbox').forEach(chk => {
+        chk.addEventListener('change', updateProgressCount);
+      });
+      updateProgressCount();
+
+      // Export Complete Workbook (.txt)
+      document.getElementById('btn-export-all').addEventListener('click', () => {
+        const report = [
+          'PROMPT ENGINEERING STUDIO WORKBOOK & TASK OUTPUTS',
+          '================================================',
+          'Workflow: One Thread · Freestyle 5-Scene Story (50s Vertical 9:16)',
+          '',
+          '--- TASK 1: POSITIVE PROMPT ---',
+          getTask1CompiledPrompt(),
+          '',
+          '--- TASK 2: POSITIVE + NEGATIVE PROMPT (VERSION B) ---',
+          document.getElementById('t2-compiled-output').textContent,
+          '',
+          '--- TASK 3: 50-SECOND 5-SCENE SCRIPT MASTER PROMPT ---',
+          getTask3MasterScriptPrompt(),
+          '',
+          '--- TASK 4: MASTER JSON CONVERSION PROMPT ---',
+          getTask4MasterJsonPrompt(),
+          '',
+          '--- TASK 5: TEXT TO IMAGE (SINGLE THREAD HANDOFF) ---',
+          'Scroll back to your AI Tool reply from Task 3 in the same thread.',
+          'Copy each scene\'s C. Text to Image Prompt + D. Negative Prompt (Scenes 1 to 5) and generate all 5 vertical 9:16 frames.',
+          '',
+          '--- TASK 6: IMAGE TO VIDEO IN GOOGLE FLOW (SINGLE THREAD HANDOFF) ---',
+          'Scroll back to your AI Tool reply from Task 4 in the same thread.',
+          'Upload each Scene frame (1 to 5) into Google Flow and paste its matching standalone JSON block (1. to 5.) to generate five 10-second clips.',
+          '',
+          '--- TASK 7: ELEVENLABS + VIDEO EDITOR CONFIGURATION ---',
+          '• Voiceover source: Copy Section A (Voiceover) for Scenes 1 to 5 from your Task 3 AI Tool reply.',
+          '• Captions source: Copy Section B (Text on Screen) for Scenes 1 to 5 from your Task 3 AI Tool reply.',
+          '• Tool 1 (Voiceover): ElevenLabs (free at elevenlabs.io)',
+          `• Selected Voice Style: ${state.task7.activeVoice} (same voice across all scenes)`,
+          `• Voice Speed: ${state.task7.activeSpeed}`,
+          '• Tool 2 (Final Cut): Clipchamp, FilmCraft, or CapCut (free)',
+          '• Export: Vertical 9:16, ~50 seconds with synced voiceover and captions',
+          '',
+          '================================================'
+        ].join('\n');
+
+        const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'prompt-engineering-workbook.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Complete workbook exported as .txt file!');
+      });
+
+      updateAnatomyBuilder();
+    });
+  </script>
+</body>
+</html>
