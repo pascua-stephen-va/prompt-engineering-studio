@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,16 +11,14 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/x-icon" href="./favicon.ico" />
 
-  <!-- Restore saved color theme before first paint -->
+  <!-- Apply manual localStorage override or system prefers-color-scheme before first paint -->
   <script>
     (function () {
       try {
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-          document.documentElement.classList.remove('dark');
-        } else if (savedTheme === 'dark') {
-          document.documentElement.classList.add('dark');
-        }
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const shouldBeDark = savedTheme === 'dark' || (savedTheme !== 'light' && prefersDark);
+        document.documentElement.classList.toggle('dark', shouldBeDark);
       } catch (e) {}
     })();
   </script>
@@ -89,11 +87,8 @@
           <span class="hidden lg:inline">Reset Session</span>
         </button>
 
-        <!-- Theme Toggle Button -->
-        <button id="btn-theme-toggle" type="button" aria-label="Toggle color theme" class="m3-pill p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-700/20">
-          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
-          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-indigo-600"></i>
-        </button>
+        <!-- Framer Motion Theme Toggle Mount -->
+        <div id="theme-toggle-root" class="shrink-0"></div>
       </div>
     </div>
 
@@ -2375,13 +2370,6 @@ Return only the numbered JSON blocks, with no commentary.`;
         });
       });
 
-      // Dark / Light Theme Toggle
-      document.getElementById('btn-theme-toggle').addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        if (window.lucide) lucide.createIcons();
-      });
-
       // Anatomy of a prompt builder listeners
       ['anat-persona', 'anat-task', 'anat-limits', 'anat-format'].forEach(id => {
         document.getElementById(id).addEventListener('input', updateAnatomyBuilder);
@@ -2652,5 +2640,6 @@ Return only the numbered JSON blocks, with no commentary.`;
       isHydrating = false;
     });
   </script>
+  <script type="module" src="/src/themeToggleMount.tsx"></script>
 </body>
 </html>
